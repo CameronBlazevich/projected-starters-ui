@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+.game-tile {
+  border: solid;
+  margin: 10px;
+  max-width: 225px;
+  min-width: 225px;
+}
+
+.team-info {
+  background-color: lightgray;
+  height: 120px;
+}
+
+.team-abbr {
+  display: inline-block;
+  font-weight: bolder;
+  font-size: large;
+}
+
+.team-stat {
+  display: inline-block;
+  font-size: small;
+}
+
+.player-name-link {
+  font-size: small;
+}
