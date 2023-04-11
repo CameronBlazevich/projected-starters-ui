@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Col, Navbar, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
+import { useSearchParams } from "react-router-dom";
 import getData from "../api/get-free-agent-starters"
 import Login from './auth/login'
 import useToken from './auth/useToken';
 import useEmail from './auth/useEmail';
-import Logout from './auth/logout';
-import YahooAuthorization from './YahooAuthorization';
 import setCode from '../api/set-yahoo-auth-code';
 import AppHeader from './app-header';
 
@@ -19,18 +18,25 @@ function ProjectedStarters() {
   const [data, setData] = useState([]);
   const { token, setToken } = useToken();
   const [registerFlag, setRegisterFlag] = useState([]);
-  const { email, setEmail } = useEmail()
+  const { email, setEmail } = useEmail();
+  const [searchParams, setSearchParams] = useSearchParams();
+
 
 
   useEffect(() => {
     if (token) {
-      const urlParams = new URLSearchParams(document.location.search);
+      // const urlParams = new URLSearchParams(document.location.search);
 
-      const code = urlParams.get('code');
-      if (code) {
+      // const code = urlParams.get('code');
+
+      const hasCodeInUrl = searchParams.has("code");
+
+      if (hasCodeInUrl) {
         console.log('There is a code in the URL, lets save it...')
+        const code = searchParams.get('code');
         const resp = setCode(token, code)
-        urlParams.delete('code');
+        setSearchParams(new URLSearchParams())
+
       }
 
       if (!email) {
@@ -43,6 +49,8 @@ function ProjectedStarters() {
 
     }
   }, [token, email]);
+
+
 
   const toggleRegisterFlag = (isRegistering) => {
     setRegisterFlag(isRegistering);
