@@ -20,8 +20,11 @@ function ProjectedStarters() {
   
   },[]);
 
-  console.log(data)
-  const rows = data.data.map((gameDay) => {
+  const canUseRealData = data?.data?.length > 0;
+  console.log(`Can use real data: ${canUseRealData}`)
+
+  let dataToRender = canUseRealData > 0 ? data.data : mockData;
+  const rows = dataToRender.map((gameDay) => {
     return (
       <GameRow gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
     );
