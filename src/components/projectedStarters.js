@@ -30,6 +30,7 @@ function ProjectedStarters() {
       if (code) {
         console.log('There is a code in the URL, lets save it...')
         const resp = setCode(token, code)
+        urlParams.delete('code');
       }
 
       if (!email) {
