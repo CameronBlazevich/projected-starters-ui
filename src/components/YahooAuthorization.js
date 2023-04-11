@@ -1,7 +1,7 @@
 import { Button } from "reactstrap";
 
 
-function YahooAuthorization() {
+const YahooAuthorization = () => {
     const handleClick = () => {
         const client_id = process.env.REACT_APP_YAHOO_CLIENT_ID;
         
@@ -12,7 +12,7 @@ function YahooAuthorization() {
     }
 
     return (
-        <div><Button onClick={() => handleClick()}>Yahoo</Button></div>
+        <div className="yahoo-auth">Issues getting data? <Button size="sm" onClick={() => handleClick()}>Re-Auth</Button></div>
     )
 
 }

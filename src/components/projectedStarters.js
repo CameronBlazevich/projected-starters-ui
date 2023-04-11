@@ -7,6 +7,7 @@ import useEmail from './auth/useEmail';
 import Logout from './auth/logout';
 import YahooAuthorization from './YahooAuthorization';
 import setCode from '../api/set-yahoo-auth-code';
+import AppHeader from './app-header';
 
 
 
@@ -24,7 +25,7 @@ function ProjectedStarters() {
   useEffect(() => {
     if (token) {
       const urlParams = new URLSearchParams(document.location.search);
-      
+
       const code = urlParams.get('code');
       if (code) {
         console.log('There is a code in the URL, lets save it...')
@@ -72,11 +73,11 @@ function ProjectedStarters() {
 
   return (
   <div>
-    <Row>Logged in as {email} {' '}
-    <Logout logout={logout}></Logout>
-    <YahooAuthorization></YahooAuthorization>
-    </Row>
+    <AppHeader logout={logout} email={email}></AppHeader>
+    <div className="container">
+    <h2>Free Agent Probable Pitchers</h2>
     <div className="projected-starters">{rows}</div>
+    </div>
   </div>)
 }
 
@@ -87,8 +88,8 @@ function GameRow(props) {
     return <Game key={index} gameInfo={game}></Game>;
   });
   return (
-    <Row>
-      <Row>{props.gameDate}</Row>
+    <Row className="game-row">
+      <Row className="game-date">{props.gameDate}</Row>
       <Row>{games}</Row>
     </Row>
   );

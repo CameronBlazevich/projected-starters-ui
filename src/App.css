@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
@@ -15,12 +15,14 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: fit-content;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 5px 10px 5px 15px;
+  /* font-size: calc(10px + 2vmin); */
+
   color: white;
 }
 
@@ -51,6 +53,7 @@ a:hover {
   margin: 10px;
   max-width: 225px;
   min-width: 225px;
+  text-align: center;
 }
 
 .team-info {
@@ -71,4 +74,26 @@ a:hover {
 
 .player-name-link {
   font-size: small;
+}
+
+.logged-in-email {
+  max-width: fit-content;
+  min-width: fit-content;
+}
+
+.yahoo-auth {
+  max-width: fit-content;
+  min-width: fit-content;
+}
+
+.game-row {
+  border-style: solid;
+  border-color: lightgray;
+  border-width: 1px; 
+  margin:5px;
+}
+
+.game-date {
+  font-size: large;
+  margin:5px
 }
