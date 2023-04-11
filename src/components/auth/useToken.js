@@ -13,6 +13,9 @@ export default function useToken() {
         if (userToken?.Token) {
             sessionStorage.setItem('token', JSON.stringify(userToken));
             setToken(userToken?.Token)
+        } else {
+            sessionStorage.removeItem("token");
+            setToken(null)
         }
     };
 
