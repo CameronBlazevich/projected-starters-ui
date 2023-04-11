@@ -18,12 +18,16 @@ function ProjectedStarters() {
 
   useEffect(() => {
     if (token) {
+      if (!email) {
       setEmail(getUserEmail());
-      getData().then(resp => {
+      }
+     
+      getData(token).then(resp => {
         setData(resp)
       })
+    
     }
-  }, [token, email]);
+  }, [token]);
 
   const toggleRegisterFlag = (isRegistering) => {
     setRegisterFlag(isRegistering);
@@ -40,14 +44,12 @@ function ProjectedStarters() {
         return userToken?.Email
   }
 
-  console.log(`EMAIL: ${email}`)
-
   const canUseRealData = data?.data?.length > 0;
   console.log(`Using real data: ${canUseRealData}`)
   const dataToUse = canUseRealData ? data.data : mockData
-  const rows = dataToUse.map((gameDay) => {
+  const rows = dataToUse.map((gameDay, index) => {
     return (
-      <GameRow gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
+      <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
     );
   });
 
@@ -57,8 +59,8 @@ function ProjectedStarters() {
 export default ProjectedStarters;
 
 function GameRow(props) {
-  const games = props.games.map((game) => {
-    return <Game gameInfo={game}></Game>;
+  const games = props.games.map((game, index) => {
+    return <Game key={index} gameInfo={game}></Game>;
   });
   return (
     <Row>

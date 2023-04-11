@@ -18,7 +18,8 @@ export default class Register extends Component {
 
     onSubmit = (event) => {
         event.preventDefault();
-        fetch('https://salty-lake-22253.herokuapp.com/register', {
+        const baseUrl = process.env.REACT_APP_API_URL;
+        fetch(`${baseUrl}/register`, {
             method: 'POST',
             body: JSON.stringify(this.state),
             headers: {

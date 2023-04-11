@@ -19,7 +19,8 @@ export default class Login extends Component {
 
     onSubmit = (event) => {
         event.preventDefault();
-        fetch('https://salty-lake-22253.herokuapp.com/login', {
+        const baseUrl = process.env.REACT_APP_API_URL;
+        fetch(`${baseUrl}/login`, {
             method: 'POST',
             body: JSON.stringify(this.state),
             headers: {

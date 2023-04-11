@@ -1,10 +1,11 @@
 import axios from "axios"
 
-export default async function getData() {
+export default async function getData(token) {
     try {
-        console.log("calling getData")
+        const baseUrl = process.env.REACT_APP_API_URL;
+        console.log(`calling getData with token: ${token}`)
         const resp = await axios({
-            url: "https://salty-lake-22253.herokuapp.com/getfreeagents/3/1",
+            url: `${baseUrl}/getfreeagents/3/1`,
             method: 'get'
         });
 
