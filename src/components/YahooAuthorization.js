@@ -13,7 +13,7 @@ const YahooAuthorization = () => {
     }
 
     return (
-        <div className="yahoo-auth">Issues getting data? <Button size="sm" onClick={() => handleClick()}>Re-Auth</Button></div>
+        <div className="yahoo-auth">Click to Authorize <Button size="sm" onClick={() => handleClick()}>Yahoo</Button></div>
     )
 
 }

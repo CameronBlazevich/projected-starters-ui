@@ -97,11 +97,17 @@ function ProjectedStarters() {
     return <div className="projected-starters">{rows}</div>
   }
 
+  const renderMockDataWarning = () => {
+    
+  return <div className="mock-data-container"><h4>Showing Mock Data</h4><p>Your Yahoo account needs to be connected in order to show real data. Please click the "Yahoo" button in the upper right corner and log in.</p></div>
+  }
+
   return (
   <div>
-    <AppHeader logout={logout} email={email}></AppHeader>0
+    <AppHeader logout={logout} email={email}></AppHeader>
     <div className="container">
     <h2>Free Agent Probable Pitchers</h2>
+    {!canUseRealData ? renderMockDataWarning() : null}
     {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
     
     </div>
