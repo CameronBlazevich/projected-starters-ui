@@ -25,20 +25,19 @@ function ProjectedStarters() {
 
   useEffect(() => {
     if (token) {
-      // const urlParams = new URLSearchParams(document.location.search);
-
-      // const code = urlParams.get('code');
-
-      const hasCodeInUrl = searchParams.has("code");
-
-      if (hasCodeInUrl) {
-        console.log('There is a code in the URL, lets save it...')
-        const code = searchParams.get('code');
-        const resp = setCode(token, code)
-        setSearchParams(new URLSearchParams())
-
+      
+      async function handleUrlCode() {
+        const hasCodeInUrl = searchParams.has("code");
+        if (hasCodeInUrl) {
+          console.log('There is a code in the URL, lets save it...')
+          const code = searchParams.get('code');
+          const resp = await setCode(token, code)
+          setSearchParams(new URLSearchParams())
+        }
       }
 
+      handleUrlCode();
+      
       if (!email) {
         setEmail(getUserEmail());
       }
