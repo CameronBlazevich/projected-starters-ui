@@ -20,14 +20,14 @@ function ProjectedStarters() {
   const [registerFlag, setRegisterFlag] = useState([]);
   const { email, setEmail } = useEmail();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isLoading, setLoading] = useState(false);
 
 
 
   useEffect(() => {
     if (token) {
-      
-      async function handleUrlCode() {
-        const hasCodeInUrl = searchParams.has("code");
+      const hasCodeInUrl = searchParams.has("code");
+      async function handleUrlCode(hasCodeInUrl) {
         if (hasCodeInUrl) {
           console.log('There is a code in the URL, lets save it...')
           const code = searchParams.get('code');
@@ -36,18 +36,26 @@ function ProjectedStarters() {
         }
       }
 
-      handleUrlCode();
+      handleUrlCode(hasCodeInUrl);
+      if (hasCodeInUrl) {
+        return;
+      }
       
       if (!email) {
         setEmail(getUserEmail());
       }
 
+      setLoading(true);
       getData(token).then(resp => {
         setData(resp)
+        setLoading(false);
+      }).catch(err => {
+        setLoading(false)
+        console.err(err)
       })
 
     }
-  }, [token, email]);
+  }, [token, email, setEmail, searchParams]);
 
 
 
@@ -56,7 +64,11 @@ function ProjectedStarters() {
   }
 
   if (!token) {
-    return <Login setToken={setToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login>
+    return <div className="container"><Login setToken={setToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
+  }
+
+  if (isLoading) {
+    return <div>LOADING</div>
   }
 
   const getUserEmail = () => {

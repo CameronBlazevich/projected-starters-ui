@@ -32,13 +32,11 @@ export default class Login extends Component {
                     res.json().then(json => {
                         // console.log(json)
                         if (json) {
-                        this.props.setToken(json)
+                            this.props.setToken(json)
                         } else {
                             console.log("No token after logging in.")
                         }
                     })
-                    // console.log(res.json())
-                    // this.props.setToken(res.data)
                 } else {
                     const error = new Error(res.error);
                     throw error;

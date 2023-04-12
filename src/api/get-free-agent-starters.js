@@ -11,5 +11,6 @@ export default async function getData(token) {
         return resp;
     } catch (err) {
         console.error(err)
+        return err;
     }
 }

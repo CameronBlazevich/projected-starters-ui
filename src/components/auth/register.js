@@ -16,6 +16,10 @@ export default class Register extends Component {
         });
     }
 
+    showError = (error) => {
+        this.setState({error: error})
+    }
+
     onSubmit = (event) => {
         event.preventDefault();
         const baseUrl = process.env.REACT_APP_API_URL;
@@ -31,9 +35,9 @@ export default class Register extends Component {
                     res.json().then(json => {
                         console.log(json)
                         if (json?.Token) {
-                        this.props.setToken(json)
+                            this.props.setToken(json)
                         } else {
-                            console.log("No token after registration")
+                            this.showError("Email already in use. Please log in instead.")
                         }
                     })
 
@@ -52,27 +56,28 @@ export default class Register extends Component {
     render() {
         return (
             <div>
-            <form onSubmit={this.onSubmit}>
-                <h1>Register Below!</h1>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter email"
-                    value={this.state.email}
-                    onChange={this.handleInputChange}
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    value={this.state.password}
-                    onChange={this.handleInputChange}
-                    required
-                />
-                <input type="submit" value="Submit" />
-            </form>
-            <p>Already have an account? <a href="#" onClick={() => this.props.setRegisterFlag(false)}>Login Here</a></p>
+                <form onSubmit={this.onSubmit}>
+                    <h1>Register Below!</h1>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter email"
+                        value={this.state.email}
+                        onChange={this.handleInputChange}
+                        required
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        value={this.state.password}
+                        onChange={this.handleInputChange}
+                        required
+                    />
+                    <input type="submit" value="Submit" />
+                </form>
+                <p>Already have an account? <a href="#" onClick={() => this.props.setRegisterFlag(false)}>Login Here</a></p>
+                <p className="error">{this.state.error}</p>
             </div>
         );
     }
