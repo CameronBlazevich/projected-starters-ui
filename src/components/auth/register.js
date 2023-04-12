@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AppExplanation from './app-explanation';
 
 export default class Register extends Component {
     constructor(props) {
@@ -56,6 +57,7 @@ export default class Register extends Component {
     render() {
         return (
             <div>
+            <div className="registration-form">
                 <form onSubmit={this.onSubmit}>
                     <h1>Register Below!</h1>
                     <input
@@ -78,6 +80,9 @@ export default class Register extends Component {
                 </form>
                 <p>Already have an account? <a href="#" onClick={() => this.props.setRegisterFlag(false)}>Login Here</a></p>
                 <p className="error">{this.state.error}</p>
+                
+            </div>
+            {/* <AppExplanation></AppExplanation> */}
             </div>
         );
     }

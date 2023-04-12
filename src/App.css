@@ -126,3 +126,16 @@ a:hover {
   margin-left: -50px;
   z-index: 1;
 }
+
+.registration-form {
+  width: fit-content;
+  padding: 5px;
+  border-style: solid;
+  border-color: blue;
+  margin-top:50px
+
+}
+
+.app-preview-image {
+  width: 300px;
+}

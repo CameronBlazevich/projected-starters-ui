@@ -53,7 +53,7 @@ export default class Login extends Component {
             return (<Register setToken={this.props.setToken} setRegisterFlag={this.props.setRegisterFlag}></Register>)
         }
         return (
-            <div>
+            <div className="login-form">
             <form onSubmit={this.onSubmit}>
                 <h1>Login Below!</h1>
                 <input
