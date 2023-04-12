@@ -7,6 +7,8 @@ import useToken from './auth/useToken';
 import useEmail from './auth/useEmail';
 import setCode from '../api/set-yahoo-auth-code';
 import AppHeader from './app-header';
+import { RotatingLines } from 'react-loader-spinner';
+import LoadingIndicator from './loading-indicator';
 
 
 
@@ -67,10 +69,6 @@ function ProjectedStarters() {
     return <div className="container"><Login setToken={setToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
   }
 
-  if (isLoading) {
-    return <div>LOADING</div>
-  }
-
   const getUserEmail = () => {
     console.log('sanity check')
     const tokenString = sessionStorage.getItem('token');
@@ -91,12 +89,21 @@ function ProjectedStarters() {
     );
   });
 
+  const renderLoadingIndicator = () => {
+    return <LoadingIndicator></LoadingIndicator>
+  }
+
+  const renderProjectedStarters = () => {
+    return <div className="projected-starters">{rows}</div>
+  }
+
   return (
   <div>
-    <AppHeader logout={logout} email={email}></AppHeader>
+    <AppHeader logout={logout} email={email}></AppHeader>0
     <div className="container">
     <h2>Free Agent Probable Pitchers</h2>
-    <div className="projected-starters">{rows}</div>
+    {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
+    
     </div>
   </div>)
 }
