@@ -107,7 +107,7 @@ function ProjectedStarters() {
     <AppHeader logout={logout} email={email}></AppHeader>
     <div className="container">
     <h2>Free Agent Probable Pitchers</h2>
-    {canUseRealData && !isLoading ?  null : renderMockDataWarning()}
+    {canUseRealData || isLoading ?  null : renderMockDataWarning()}
     {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
     
     </div>
