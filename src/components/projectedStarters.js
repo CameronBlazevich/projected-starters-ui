@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Button } from 'reactstrap';
 import { useSearchParams } from "react-router-dom";
 import getData from "../api/get-free-agent-starters"
 import Login from './auth/login'
 import useToken from './auth/useToken';
 import useEmail from './auth/useEmail';
-import setCode from '../api/set-yahoo-auth-code';
+import { setCode, getYahooInfo } from '../api/yahoo-integration-info';
 import AppHeader from './app-header';
-import { RotatingLines } from 'react-loader-spinner';
 import LoadingIndicator from './loading-indicator';
+import YahooConnectionModal from './yahoo/connection-modal';
+
 
 
 
@@ -23,6 +24,8 @@ function ProjectedStarters() {
   const { email, setEmail } = useEmail();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setLoading] = useState(false);
+  const [modal, setModal] = useState(false);
+  const toggleModal = () => setModal(!modal);
 
 
 
@@ -42,10 +45,18 @@ function ProjectedStarters() {
       if (hasCodeInUrl) {
         return;
       }
-      
+
       if (!email) {
         setEmail(getUserEmail());
       }
+
+      // see if the user has all of the required info for yahoo connection
+      async function getYahooIntegrationInfo(authToken) {
+        // const yahooInfo = await getYahooInfo(authToken);
+        // console.log(`Yahoo Info: ${yahooInfo}`)
+      }
+
+      getYahooIntegrationInfo(token)
 
       setLoading(true);
       getData(token).then(resp => {
@@ -76,7 +87,6 @@ function ProjectedStarters() {
     return userToken?.Email
   }
   const logout = () => {
-    // sessionStorage.removeItem("token");
     setToken(null)
   }
 
@@ -98,20 +108,24 @@ function ProjectedStarters() {
   }
 
   const renderMockDataWarning = () => {
-    
-  return <div className="mock-data-container"><h4>Showing Mock Data</h4><p>Your Yahoo account needs to be connected in order to show real data. Please click the "Yahoo" button in the upper right corner and log in.</p></div>
+
+    return <div className="mock-data-container"><h4>Showing Mock Data</h4><p>Your Yahoo account needs to be connected in order to show real data. Please click the "Yahoo" button in the upper right corner and log in.</p></div>
   }
 
   return (
-  <div>
-    <AppHeader logout={logout} email={email}></AppHeader>
-    <div className="container">
-    <h2>Free Agent Probable Pitchers</h2>
-    {canUseRealData || isLoading ?  null : renderMockDataWarning()}
-    {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
-    
-    </div>
-  </div>)
+    <div>
+      <AppHeader logout={logout} email={email}></AppHeader>
+      <YahooConnectionModal modal={modal} toggle={toggleModal}></YahooConnectionModal>
+      <Button color="danger" onClick={toggleModal}>
+        Click Me
+      </Button>
+      <div className="container">
+        <h2>Free Agent Probable Pitchers</h2>
+        {canUseRealData || isLoading ? null : renderMockDataWarning()}
+        {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
+
+      </div>
+    </div>)
 }
 
 export default ProjectedStarters;
