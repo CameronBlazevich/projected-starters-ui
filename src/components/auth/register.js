@@ -13,12 +13,13 @@ export default class Register extends Component {
     handleInputChange = (event) => {
         const { value, name } = event.target;
         this.setState({
-            [name]: value
+            [name]: value,
+            error:undefined
         });
     }
 
     showError = (error) => {
-        this.setState({error: error})
+        this.setState({ error: error })
     }
 
     onSubmit = (event) => {
@@ -37,11 +38,15 @@ export default class Register extends Component {
                         console.log(json)
                         if (json?.Token) {
                             this.props.setToken(json)
-                        } else {
+                        }
+                    })
+                } else if (res.status === 400) {
+                    res.json().then(json => {
+                        if (json?.error?.startsWith("Record already")) {
                             this.showError("Email already in use. Please log in instead.")
                         }
                     })
-
+                    
                 } else {
                     console.error(res.error)
                     const error = new Error(res.error);
@@ -50,39 +55,39 @@ export default class Register extends Component {
             })
             .catch(err => {
                 console.error(err);
-                alert('Error logging in please try again');
+                this.showError('Error registering please try again');
             });
     }
 
     render() {
         return (
             <div>
-            <div className="registration-form">
-                <form onSubmit={this.onSubmit}>
-                    <h1>Register Below!</h1>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter email"
-                        value={this.state.email}
-                        onChange={this.handleInputChange}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Enter password"
-                        value={this.state.password}
-                        onChange={this.handleInputChange}
-                        required
-                    />
-                    <input type="submit" value="Submit" />
-                </form>
-                <p>Already have an account? <a href="#" onClick={() => this.props.setRegisterFlag(false)}>Login Here</a></p>
-                <p className="error">{this.state.error}</p>
-                
-            </div>
-            {/* <AppExplanation></AppExplanation> */}
+                <div className="registration-form">
+                    <form onSubmit={this.onSubmit}>
+                        <h1>Register Below!</h1>
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter email"
+                            value={this.state.email}
+                            onChange={this.handleInputChange}
+                            required
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter password"
+                            value={this.state.password}
+                            onChange={this.handleInputChange}
+                            required
+                        />
+                        <input type="submit" value="Submit" />
+                    </form>
+                    <p>Already have an account? <a href="#" onClick={() => this.props.setRegisterFlag(false)}>Login Here</a></p>
+                    <p className="error">{this.state.error}</p>
+
+                </div>
+                {/* <AppExplanation></AppExplanation> */}
             </div>
         );
     }

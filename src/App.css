@@ -127,7 +127,7 @@ a:hover {
   z-index: 1;
 }
 
-.registration-form {
+.registration-form, .login-form {
   width: fit-content;
   padding: 5px;
   border-style: solid;

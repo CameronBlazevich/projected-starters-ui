@@ -9,11 +9,15 @@ export default class Login extends Component {
             password: ''
         };
     }
+    showError = (error) => {
+        this.setState({ error: error })
+    }
 
     handleInputChange = (event) => {
         const { value, name } = event.target;
         this.setState({
-            [name]: value
+            [name]: value,
+            error:undefined
         });
     }
 
@@ -37,6 +41,8 @@ export default class Login extends Component {
                             console.log("No token after logging in.")
                         }
                     })
+                } else if (res.status === 401) {
+                    this.showError("Incorrect password")
                 } else {
                     const error = new Error(res.error);
                     throw error;
@@ -54,27 +60,28 @@ export default class Login extends Component {
         }
         return (
             <div className="login-form">
-            <form onSubmit={this.onSubmit}>
-                <h1>Login Below!</h1>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter email"
-                    value={this.state.email}
-                    onChange={this.handleInputChange}
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    value={this.state.password}
-                    onChange={this.handleInputChange}
-                    required
-                />
-                <input type="submit" value="Submit" />
-            </form>
+                <form onSubmit={this.onSubmit}>
+                    <h1>Login Below!</h1>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter email"
+                        value={this.state.email}
+                        onChange={this.handleInputChange}
+                        required
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        value={this.state.password}
+                        onChange={this.handleInputChange}
+                        required
+                    />
+                    <input type="submit" value="Submit" />
+                </form>
                 <p>No Account? <a href="#" onClick={() => this.props.setRegisterFlag(true)}>Register Here</a></p>
+                <p className="error">{this.state.error}</p>
             </div>
         );
     }
