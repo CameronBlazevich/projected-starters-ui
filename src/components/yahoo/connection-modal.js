@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import IntegrationReadiness from './integration-readiness';
 
 function YahooConnectionModal(props) {
-    const {yahooInfo, modal, toggle, setLeagueId, submitLeagueId} = props;
+    const {leagueIds, modal, toggle, setLeagueId, submitLeagueId} = props;
     const handleClick = () => {
       const client_id = process.env.REACT_APP_YAHOO_CLIENT_ID;
       
@@ -15,12 +15,6 @@ function YahooConnectionModal(props) {
   }
 
   
-  
-    const hasLeagueId = yahooInfo?.league_id?.length > 0;
-    // console.log(`yahoo info: ${JSON.stringify(yahooInfo)}`)
-    // console.log(hasLeagueId)
-
-
     const renderConnectYahooButton = () => {
       return (<Button color="primary" onClick={() => handleClick()}>
       Connect Yahoo
@@ -37,10 +31,10 @@ function YahooConnectionModal(props) {
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Yahoo Connection Instructions</ModalHeader>
         <ModalBody>
-          <IntegrationReadiness setLeagueId={setLeagueId} yahooInfo={yahooInfo}></IntegrationReadiness>
+          <IntegrationReadiness setLeagueId={setLeagueId} leagueIds={leagueIds}></IntegrationReadiness>
         </ModalBody>
         <ModalFooter>
-          {hasLeagueId ? renderConnectYahooButton() : renderLeagueIdButton()}
+          {renderLeagueIdButton()}
         </ModalFooter>
       </Modal>
     </div>

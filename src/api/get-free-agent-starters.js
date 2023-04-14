@@ -1,8 +1,9 @@
 import axios from "axios"
+import { createErrorResponse, createSuccessResponse } from "./api-response";
 
 export default async function getData(token, leagueId) {
     if (!token && leagueId) {
-        return mockData;
+        return createSuccessResponse(mockData);
     }
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
@@ -11,10 +12,10 @@ export default async function getData(token, leagueId) {
         const resp = await axios.get(
             `${baseUrl}/getfreeagents/${leagueId}`,
             {headers: config});
-        return resp.data;
+        return createSuccessResponse(resp.data);
     } catch (err) {
         console.error(err)
-        return err;
+        return createErrorResponse(err);
     }
 }
 

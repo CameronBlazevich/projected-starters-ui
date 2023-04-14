@@ -14,7 +14,7 @@ const YahooAuthorization = (props) => {
     }
 
     return (
-        <div className="yahoo-auth">Click to Authorize <Button size="sm" onClick={() => toggleModal()}>Yahoo</Button></div>
+        <div className="yahoo-auth">Click to Authorize <Button size="sm" onClick={() => handleClick()}>Yahoo</Button></div>
     )
 
 }

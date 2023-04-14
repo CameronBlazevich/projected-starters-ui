@@ -1,30 +1,10 @@
-import { Row, Col, Button } from 'reactstrap'
-import { useState } from 'react';
-import { setLeagueId } from '../../api/yahoo-integration-info';
+import { Row } from 'reactstrap'
 
 const IntegrationReadiness = (props) => {
-
-    const renderCompletedForm = () => {
-        return <div className='league-id-form'>
-            <h6>You've completed required items. Time to connect.</h6>
-            <Row><p>Your League Id: {props.yahooInfo.league_id}</p>
-                {/* <Col><Button onClick={props.setLeagueId} size="sm">Edit League Id</Button></Col> */}
-            </Row>
-
-
-
-        </div>
-    }
-
-
-    if (props.yahooInfo?.league_id?.length > 0) {
-        return renderCompletedForm()
-    }
-
     return (
         <div className='league-id-form'>
-            <h6>To connect your Yahoo account, we need your League Id:</h6>
-            <LeagueIdForm leagueId={props.yahooInfo?.league_id} setLeagueId={props.setLeagueId}></LeagueIdForm>
+            <h6>To show league specific data, we need your league ID:</h6>
+            <LeagueIdForm setLeagueId={props.setLeagueId}></LeagueIdForm>
         </div>)
 }
 
@@ -42,7 +22,7 @@ const LeagueIdForm = (props) => {
             <p>Then your league id is <span className="url-display">92842</span></p>
             <hr></hr>
             <h4>Enter League Id Here:</h4>
-            <input type="text" placeholder="12345" defaultValue={props.leagueId} onChange={e => props.setLeagueId(e.target.value)}></input>
+            <input type="text" placeholder="12345" onChange={e => props.setLeagueId(e.target.value)}></input>
         </div>
     )
 }

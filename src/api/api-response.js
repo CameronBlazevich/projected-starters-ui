@@ -5,4 +5,5 @@ export const createErrorResponse = (err) => {
 
 export const createSuccessResponse = (responseData) => {
     const response = {success: true, data: responseData}
+    return response;
 }

@@ -1,33 +1,35 @@
 import { useState, useEffect } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, Button } from 'reactstrap';
 import { useSearchParams } from "react-router-dom";
 import getData from "../api/get-free-agent-starters"
 import Login from './auth/login'
 import useToken from './auth/useToken';
 import useEmail from './auth/useEmail';
-import { setCode, getYahooInfo, setYahooLeagueId } from '../api/yahoo-integration-info';
+import { setCode } from '../api/yahoo-integration-info';
 import AppHeader from './app-header';
 import LoadingIndicator from './loading-indicator';
 import YahooConnectionModal from './yahoo/connection-modal';
-import { getUserLeagues } from '../api/user-leagues';
+import ConnectedLeagues from './connected-leagues'
+import ConnectedLeaguesDrawer from './connected-leagues-drawer';
+import { getUserLeagues, createUserLeague } from '../api/user-leagues';
+import { LeagueTypes } from '../enums';
+import AddLeagueButton from './add-league-button';
 
 
 
 
 function ProjectedStarters() {
 
-
-
-
   const [data, setData] = useState([]);
   const { token, setToken } = useToken();
-  const [registerFlag, setRegisterFlag] = useState([]);
+  const [registerFlag, setRegisterFlag] = useState(false);
   const { email, setEmail } = useEmail();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [userLeagues, setUserLeagues] = useState([]);
-  const [yahooInfo, setYahooInfo] = useState();
+  const [activeLeagueId, setActiveLeagueId] = useState({})
+  const [showDrawer, setShowDrawer] = useState(false);
   const [leagueId, setLeagueId] = useState();
   const toggleModal = () => setModal(!modal);
 
@@ -58,47 +60,27 @@ function ProjectedStarters() {
       async function getLeagues(authToken) {
         const userLeaguesResponse = await getUserLeagues(authToken);
         if (userLeaguesResponse.success) {
-          await setUserLeagues(userLeaguesResponse.data)
+          setUserLeagues(userLeaguesResponse.data)
         } else {
+          handleUnautorized(userLeaguesResponse.error)
+
           console.log(`Something went wrong getting user leagues`)
         }
       }
 
       getLeagues(token);
 
-      // see if the user has all of the required info for yahoo connection
-      async function getYahooIntegrationInfo(authToken) {
-        console.log(`Making API call to getYahooInfo...`)
-        const info = await getYahooInfo(authToken);
-        setYahooInfo(info);
-        if (info?.league_id?.length > 0) {
-          setLeagueId(info.league_id);
-        }
-
-      }
-
-      if (!yahooInfo) {
-        getYahooIntegrationInfo(token)
-      }
-
-      if (yahooInfo?.league_id && false) {
-        if (!isLoading) {
-          setLoading(true);
-          console.log(`Making API call to getData()...`)
-          getData(token, leagueId).then(resp => {
-            setData(resp)
-            setLoading(false);
-          }).catch(err => {
-            setLoading(false)
-            console.err(err)
-          })
-        }
-      }
     }
-  }, [token, email, searchParams, yahooInfo]);
+  }, [token, email, searchParams]);
 
   const handleNewToken = (token) => {
     setToken(token);
+  }
+
+  const handleUnautorized = (error) => {
+    if (error && error.response?.status === 401) {
+    logout()
+    }
   }
 
 
@@ -106,16 +88,37 @@ function ProjectedStarters() {
     setRegisterFlag(isRegistering);
   }
 
-  const saveLeagueId = async () => {
-    console.log('Saving LeagueId...')
-    const resp = await setYahooLeagueId(token, leagueId);
-    setYahooInfo({ league_id: resp.data.league_id })
-    console.log(resp.data.leagueId)
+  const createLeague = async () => {
+    console.log('Creating League...')
+    const resp = await createUserLeague(token, leagueId, LeagueTypes.YAHOO);
+    console.log(JSON.stringify(resp))
+    if (resp.success) {
+      setUserLeagues(resp.data);
+    } else {
+      // ToDo: handle error
+      console.log(`Something went wrong creating League`)
+    }
+    
+    toggleModal();
+    console.log(resp.data.league_id)
 
   }
 
   if (!token) {
     return <div className="container"><Login setToken={handleNewToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
+  }
+
+  const showFreeAgents = async (leagueId) => {
+    setLoading(true);
+    setActiveLeagueId(leagueId);
+    const response = await getData(token, leagueId);
+    if (response.success) {
+    setData(response.data)
+    } else {
+      // ToDo: handle error
+      console.log(response.error)
+    }
+    setLoading(false)
   }
 
   const getUserEmail = () => {
@@ -128,7 +131,7 @@ function ProjectedStarters() {
   }
 
 
-  const canUseLeagueData = yahooInfo?.leagueId?.length > 0;
+  const canUseLeagueData = userLeagues && userLeagues[0]?.league_id;
   const rows = data.map((gameDay, index) => {
     return (
       <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
@@ -144,15 +147,23 @@ function ProjectedStarters() {
   }
 
   const renderConnectLeagueInstructions = () => {
-
-    return <div className="mock-data-container"><h4>Connect a League</h4><p>Your Yahoo account needs to be connected in order to show real data. Please click the "Add League" button in the upper right corner and log in.</p></div>
+    return <div className="mock-data-container"><h4>Connect a League</h4><AddLeagueButton onClick={createLeague}></AddLeagueButton></div>
   }
 
-  
+  const renderConnectedLeagues = () => {
+    return <ConnectedLeagues showFreeAgents={showFreeAgents} toggleModal={toggleModal} userLeagues={userLeagues}></ConnectedLeagues>;
+  }
+
+  console.log(`userLeagues: ${userLeagues}`)
+  console.log(`showDrawer: ${showDrawer}`)
   return (
     <div>
+      <ConnectedLeaguesDrawer showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer>
+      
       <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
-      <YahooConnectionModal submitLeagueId={saveLeagueId} setLeagueId={setLeagueId} yahooInfo={yahooInfo} modal={modal} toggle={toggleModal}></YahooConnectionModal>
+      <Button onClick={() => setShowDrawer(!showDrawer)}>Show</Button>
+      {/* {userLeagues?.length > 0 ? renderConnectedLeagues() : null} */}
+      <YahooConnectionModal submitLeagueId={createLeague} setLeagueId={setLeagueId} leagueIds={userLeagues} modal={modal} toggle={toggleModal}></YahooConnectionModal>
       <div className="container">
         <h2>Free Agent Probable Pitchers</h2>
         {canUseLeagueData || isLoading ? null : renderConnectLeagueInstructions()}
