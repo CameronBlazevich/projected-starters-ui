@@ -35,8 +35,7 @@ export default class Register extends Component {
             .then(res => {
                 if (res.status === 201) {
                     res.json().then(json => {
-                        console.log(json)
-                        if (json?.Token) {
+                        if (json?.token) {
                             this.props.setToken(json)
                         }
                     })

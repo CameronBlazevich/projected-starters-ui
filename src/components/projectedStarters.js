@@ -5,7 +5,7 @@ import getData from "../api/get-free-agent-starters"
 import Login from './auth/login'
 import useToken from './auth/useToken';
 import useEmail from './auth/useEmail';
-import { setCode, getYahooInfo } from '../api/yahoo-integration-info';
+import { setCode, getYahooInfo, setYahooLeagueId } from '../api/yahoo-integration-info';
 import AppHeader from './app-header';
 import LoadingIndicator from './loading-indicator';
 import YahooConnectionModal from './yahoo/connection-modal';
@@ -25,6 +25,8 @@ function ProjectedStarters() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
+  const[yahooInfo, setYahooInfo] = useState();
+  const [leagueId, setLeagueId] = useState();
   const toggleModal = () => setModal(!modal);
 
 
@@ -52,12 +54,17 @@ function ProjectedStarters() {
 
       // see if the user has all of the required info for yahoo connection
       async function getYahooIntegrationInfo(authToken) {
-        // const yahooInfo = await getYahooInfo(authToken);
-        // console.log(`Yahoo Info: ${yahooInfo}`)
+        const info = await getYahooInfo(authToken);
+        setYahooInfo(info);
+        if (info?.league_id?.length > 0) {
+          setLeagueId(info.league_id);
+        }
+        
       }
 
       getYahooIntegrationInfo(token)
 
+      if (!isLoading) {
       setLoading(true);
       getData(token).then(resp => {
         setData(resp)
@@ -66,25 +73,35 @@ function ProjectedStarters() {
         setLoading(false)
         console.err(err)
       })
-
     }
-  }, [token, email, setEmail, searchParams]);
+    }
+  }, [token, email, searchParams]);
 
+  const handleNewToken = (token) => {
+    setToken(token);
+  }
 
 
   const toggleRegisterFlag = (isRegistering) => {
     setRegisterFlag(isRegistering);
   }
 
+  const saveLeagueId = async () => {
+    console.log('Saving LeagueId...')
+    const resp = await setYahooLeagueId(token, leagueId);
+    setYahooInfo({league_id:resp.data.league_id})
+    console.log(resp.data.leagueId)
+    
+  }
+
   if (!token) {
-    return <div className="container"><Login setToken={setToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
+    return <div className="container"><Login setToken={handleNewToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
   }
 
   const getUserEmail = () => {
-    console.log('sanity check')
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
-    return userToken?.Email
+    return userToken?.email
   }
   const logout = () => {
     setToken(null)
@@ -114,9 +131,9 @@ function ProjectedStarters() {
 
   return (
     <div>
-      <AppHeader logout={logout} email={email}></AppHeader>
-      <YahooConnectionModal modal={modal} toggle={toggleModal}></YahooConnectionModal>
-      <Button color="danger" onClick={toggleModal}>
+      <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
+      <YahooConnectionModal submitLeagueId={saveLeagueId} setLeagueId={setLeagueId} yahooInfo={yahooInfo} modal={modal} toggle={toggleModal}></YahooConnectionModal>
+      <Button color="danger" onClick={() => toggleModal()}>
         Click Me
       </Button>
       <div className="container">

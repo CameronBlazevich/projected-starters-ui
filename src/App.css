@@ -139,3 +139,29 @@ a:hover {
 .app-preview-image {
   width: 300px;
 }
+
+.league-id-container {
+  text-align: center;
+}
+
+.league-id-img {
+  width: 350px;
+}
+
+.url-display {
+  background-color: lightgray;
+  padding:2px;
+}
+
+.league-id-form {
+  min-width: fit-content;
+  text-align: center;
+}
+
+::-webkit-input-placeholder {
+  text-align: center;
+}
+
+:-moz-placeholder {
+  text-align: center;
+}

@@ -1,7 +1,8 @@
 import { Button } from "reactstrap";
 
 
-const YahooAuthorization = () => {
+const YahooAuthorization = (props) => {
+    const {toggleModal} = props;
     const handleClick = () => {
         const client_id = process.env.REACT_APP_YAHOO_CLIENT_ID;
         
@@ -13,7 +14,7 @@ const YahooAuthorization = () => {
     }
 
     return (
-        <div className="yahoo-auth">Click to Authorize <Button size="sm" onClick={() => handleClick()}>Yahoo</Button></div>
+        <div className="yahoo-auth">Click to Authorize <Button size="sm" onClick={() => toggleModal()}>Yahoo</Button></div>
     )
 
 }

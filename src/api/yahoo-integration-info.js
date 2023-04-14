@@ -16,7 +16,7 @@ export async function setCode(token, code) {
     }
 }
 
-export async function setLeagueId(token, leagueId) {
+export async function setYahooLeagueId(token, leagueId) {
     // validate format league id
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
@@ -55,7 +55,7 @@ export async function getYahooInfo(token) {
         console.log(`calling getYahooInfo...`)
         const config = {"x-access-token": token};
         const resp = await axios.get(`${baseUrl}/yahoo/getYahooInfo`, {headers: config});
-        return resp;
+        return resp.data;
     } catch (err) {
         console.error(err);
     }

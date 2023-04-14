@@ -11,7 +11,7 @@ const AppHeader = (props) => {
         </Col>
         <Col></Col>
         <Col>
-            <YahooAuthorization></YahooAuthorization>
+            <YahooAuthorization toggleModal={props.toggleModal}></YahooAuthorization>
         </Col>
     </Row>
     )
