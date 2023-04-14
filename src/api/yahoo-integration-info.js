@@ -60,3 +60,16 @@ export async function getYahooInfo(token) {
         console.error(err);
     }
 }
+
+export async function getUserLeagues(token) {
+    try {
+        const baseUrl = process.env.REACT_APP_API_URL;
+        console.log(`calling getUserLeagues...`)
+        const config = {"x-access-token": token};
+        const resp = await axios.get(`${baseUrl}/getUserLeagues`, {headers: config});
+        return resp.data;
+    } catch (err) {
+        console.error(err);
+    }
+
+}
