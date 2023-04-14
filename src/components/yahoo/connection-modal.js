@@ -17,8 +17,8 @@ function YahooConnectionModal(props) {
   
   
     const hasLeagueId = yahooInfo?.league_id?.length > 0;
-    console.log(`yahoo info: ${JSON.stringify(yahooInfo)}`)
-    console.log(hasLeagueId)
+    // console.log(`yahoo info: ${JSON.stringify(yahooInfo)}`)
+    // console.log(hasLeagueId)
 
 
     const renderConnectYahooButton = () => {

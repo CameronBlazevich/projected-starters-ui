@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Col, Row, Button } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { useSearchParams } from "react-router-dom";
 import getData from "../api/get-free-agent-starters"
 import Login from './auth/login'
@@ -25,7 +25,7 @@ function ProjectedStarters() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
-  const[yahooInfo, setYahooInfo] = useState();
+  const [yahooInfo, setYahooInfo] = useState();
   const [leagueId, setLeagueId] = useState();
   const toggleModal = () => setModal(!modal);
 
@@ -54,28 +54,34 @@ function ProjectedStarters() {
 
       // see if the user has all of the required info for yahoo connection
       async function getYahooIntegrationInfo(authToken) {
+        console.log(`Making API call to getYahooInfo...`)
         const info = await getYahooInfo(authToken);
         setYahooInfo(info);
         if (info?.league_id?.length > 0) {
           setLeagueId(info.league_id);
         }
-        
+
       }
 
-      getYahooIntegrationInfo(token)
+      if (!yahooInfo) {
+        getYahooIntegrationInfo(token)
+      }
 
-      if (!isLoading) {
-      setLoading(true);
-      getData(token).then(resp => {
-        setData(resp)
-        setLoading(false);
-      }).catch(err => {
-        setLoading(false)
-        console.err(err)
-      })
+      if (yahooInfo?.league_id) {
+        if (!isLoading) {
+          setLoading(true);
+          console.log(`Making API call to getData()...`)
+          getData(token, leagueId).then(resp => {
+            setData(resp)
+            setLoading(false);
+          }).catch(err => {
+            setLoading(false)
+            console.err(err)
+          })
+        }
+      }
     }
-    }
-  }, [token, email, searchParams]);
+  }, [token, email, searchParams,yahooInfo]);
 
   const handleNewToken = (token) => {
     setToken(token);
@@ -89,9 +95,9 @@ function ProjectedStarters() {
   const saveLeagueId = async () => {
     console.log('Saving LeagueId...')
     const resp = await setYahooLeagueId(token, leagueId);
-    setYahooInfo({league_id:resp.data.league_id})
+    setYahooInfo({ league_id: resp.data.league_id })
     console.log(resp.data.leagueId)
-    
+
   }
 
   if (!token) {
@@ -108,7 +114,7 @@ function ProjectedStarters() {
   }
 
   const canUseRealData = data?.data?.length > 0;
-  console.log(`Using real data: ${canUseRealData}`)
+  // console.log(`Using real data: ${canUseRealData}`)
   const dataToUse = canUseRealData ? data.data : mockData
   const rows = dataToUse.map((gameDay, index) => {
     return (
@@ -133,9 +139,6 @@ function ProjectedStarters() {
     <div>
       <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
       <YahooConnectionModal submitLeagueId={saveLeagueId} setLeagueId={setLeagueId} yahooInfo={yahooInfo} modal={modal} toggle={toggleModal}></YahooConnectionModal>
-      <Button color="danger" onClick={() => toggleModal()}>
-        Click Me
-      </Button>
       <div className="container">
         <h2>Free Agent Probable Pitchers</h2>
         {canUseRealData || isLoading ? null : renderMockDataWarning()}

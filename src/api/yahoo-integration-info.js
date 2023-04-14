@@ -3,7 +3,7 @@ import axios from "axios"
 export async function setCode(token, code) {
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
-        console.log(`calling setCode with token: ${token} and code${code}`)
+        // console.log(`calling setCode with token: ${token} and code${code}`)
         const config = {"x-access-token": token};
         const body = {code}
         const resp = await axios.post(
@@ -20,7 +20,7 @@ export async function setYahooLeagueId(token, leagueId) {
     // validate format league id
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
-        console.log(`calling setLeagueId with token: ${token} and leagueId ${leagueId}`)
+        // console.log(`calling setLeagueId with token: ${token} and leagueId ${leagueId}`)
         const config = {"x-access-token": token};
         const body = {leagueId}
         const resp = await axios.post(
@@ -36,7 +36,7 @@ export async function setYahooLeagueId(token, leagueId) {
 export async function setTeamId(token, teamId) {
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
-        console.log(`calling setTeamId with token: ${token} and teamId ${teamId}`)
+        // console.log(`calling setTeamId with token: ${token} and teamId ${teamId}`)
         const config = {"x-access-token": token};
         const body = {teamId}
         const resp = await axios.post(
