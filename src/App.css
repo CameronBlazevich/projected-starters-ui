@@ -51,13 +51,13 @@ a:hover {
 .game-tile {
   border: solid;
   margin: 10px;
-  max-width: 225px;
-  min-width: 225px;
+  max-width: 300px;
+  min-width: 300px;
   text-align: center;
 }
 
 .team-info {
-  background-color: lightgray;
+  background-color: #ECECEC;
   height: 120px;
 }
 
@@ -73,7 +73,12 @@ a:hover {
 }
 
 .player-name-link {
-  font-size: small;
+  font-size: large;
+  font-weight:550;
+}
+
+.pitcher-stats {
+  font-size:x-small;
 }
 
 .logged-in-email {
@@ -179,6 +184,9 @@ a:hover {
   margin-top:40px;
 
 }
+span.bold {
+  font-weight: 550;
+}
 
 /* .offcanvas {
   transform: translateX(-100%);
@@ -189,3 +197,5 @@ a:hover {
   transform: translateX(0);
   transition: transform 0.3s ease-out;
 } */
+
+

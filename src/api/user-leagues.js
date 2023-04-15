@@ -43,8 +43,9 @@ export async function deleteUserLeague(token, leagueId) {
             `${baseUrl}/leagues/deleteUserLeague`,
             body,
             { headers: config });
-        return resp;
+        return createSuccessResponse(resp.data);
     } catch (err) {
         console.error(err);
+        return createErrorResponse(err)
     }
 }

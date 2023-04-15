@@ -11,7 +11,7 @@ import LoadingIndicator from './loading-indicator';
 import YahooConnectionModal from './yahoo/connection-modal';
 import ConnectedLeagues from './connected-leagues'
 import ConnectedLeaguesDrawer from './connected-leagues-drawer';
-import { getUserLeagues, createUserLeague } from '../api/user-leagues';
+import { getUserLeagues, createUserLeague, deleteUserLeague } from '../api/user-leagues';
 import { LeagueTypes } from '../enums';
 import AddLeagueButton from './add-league-button';
 
@@ -28,7 +28,7 @@ function ProjectedStarters() {
   const [isLoading, setLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const [userLeagues, setUserLeagues] = useState([]);
-  const [activeLeagueId, setActiveLeagueId] = useState({})
+  const [activeLeagueId, setActiveLeagueId] = useState()
   const [showDrawer, setShowDrawer] = useState(false);
   const [leagueId, setLeagueId] = useState();
   const toggleModal = () => setModal(!modal);
@@ -36,6 +36,7 @@ function ProjectedStarters() {
 
 
   useEffect(() => {
+    console.log(`Called useEffect()...`)
     if (token) {
       const hasCodeInUrl = searchParams.has("code");
       async function handleUrlCode(hasCodeInUrl) {
@@ -63,7 +64,6 @@ function ProjectedStarters() {
           setUserLeagues(userLeaguesResponse.data)
         } else {
           handleUnautorized(userLeaguesResponse.error)
-
           console.log(`Something went wrong getting user leagues`)
         }
       }
@@ -91,7 +91,6 @@ function ProjectedStarters() {
   const createLeague = async () => {
     console.log('Creating League...')
     const resp = await createUserLeague(token, leagueId, LeagueTypes.YAHOO);
-    console.log(JSON.stringify(resp))
     if (resp.success) {
       setUserLeagues(resp.data);
     } else {
@@ -100,7 +99,20 @@ function ProjectedStarters() {
     }
     
     toggleModal();
-    console.log(resp.data.league_id)
+
+  }
+
+  const deleteLeague = async (leagueId) => {
+    console.log(`Deleting league with id: ${leagueId}`);
+    const response = await deleteUserLeague(token, leagueId);
+    if (response.success) {
+      console.log(response)
+      setUserLeagues(response.data);
+    } else {
+      handleUnautorized(response.error);
+      // ToDo: handle error
+      console.error(response.error)
+    }
 
   }
 
@@ -132,6 +144,7 @@ function ProjectedStarters() {
 
 
   const canUseLeagueData = userLeagues && userLeagues[0]?.league_id;
+  console.log(JSON.stringify(data))
   const rows = data.map((gameDay, index) => {
     return (
       <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
@@ -150,22 +163,15 @@ function ProjectedStarters() {
     return <div className="mock-data-container"><h4>Connect a League</h4><AddLeagueButton onClick={createLeague}></AddLeagueButton></div>
   }
 
-  const renderConnectedLeagues = () => {
-    return <ConnectedLeagues showFreeAgents={showFreeAgents} toggleModal={toggleModal} userLeagues={userLeagues}></ConnectedLeagues>;
-  }
-
-  console.log(`userLeagues: ${userLeagues}`)
-  console.log(`showDrawer: ${showDrawer}`)
   return (
     <div>
-      <ConnectedLeaguesDrawer showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer>
+      <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer>
       
       <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
       <Button onClick={() => setShowDrawer(!showDrawer)}>Show</Button>
-      {/* {userLeagues?.length > 0 ? renderConnectedLeagues() : null} */}
       <YahooConnectionModal submitLeagueId={createLeague} setLeagueId={setLeagueId} leagueIds={userLeagues} modal={modal} toggle={toggleModal}></YahooConnectionModal>
       <div className="container">
-        <h2>Free Agent Probable Pitchers</h2>
+        <h2>Free Agent Probable Pitchers {activeLeagueId ? `(League ${activeLeagueId})`: ""}</h2>
         {canUseLeagueData || isLoading ? null : renderConnectLeagueInstructions()}
         {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
 
@@ -188,6 +194,7 @@ function GameRow(props) {
 }
 
 function Game(props) {
+  // console.log(JSON.stringify(props.gameInfo.awayPitcher))
   return (
     <Col className="game-tile">
       <Row className="team-info">
@@ -195,13 +202,13 @@ function Game(props) {
           <Row className="team-abbr">{props.gameInfo.awayTeam.teamAbbr}</Row>
           <hr></hr>
           <TeamStat
-            statLabel="R's Rank"
+            statLabel="Rs Rank"
             statName="runsRank"
             team="awayTeam"
             gameInfo={props.gameInfo}
           ></TeamStat>
           <TeamStat
-            statLabel="K's Rank"
+            statLabel="SO Rank"
             statName="strikeoutsRank"
             team="awayTeam"
             gameInfo={props.gameInfo}
@@ -212,13 +219,13 @@ function Game(props) {
           <Row className="team-abbr">{props.gameInfo.homeTeam.teamAbbr}</Row>{' '}
           <hr></hr>
           <TeamStat
-            statLabel="R's Rank"
+            statLabel="Rs Rank"
             statName="runsRank"
             team="homeTeam"
             gameInfo={props.gameInfo}
           ></TeamStat>
           <TeamStat
-            statLabel="K's Rank"
+            statLabel="SO Rank"
             statName="strikeoutsRank"
             team="homeTeam"
             gameInfo={props.gameInfo}
@@ -227,15 +234,25 @@ function Game(props) {
       </Row>
       <hr></hr>
       <Row>
-        <Col className="player-name-link">
-          <a href={props.gameInfo.awayPitcher?.playerUrl} target="_">
+        <Col>
+          <Row>
+          <a className="player-name-link" href={props.gameInfo.awayPitcher?.playerUrl} target="_">
             {props.gameInfo.awayPitcher?.name?.full}
           </a>
+          </Row>
+          <Row>
+            <PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats>
+          </Row>
         </Col>
-        <Col className="player-name-link">
-          <a href={props.gameInfo.homePitcher?.playerUrl} target="_">
+        <Col>
+          <Row>
+          <a className="player-name-link" href={props.gameInfo.homePitcher?.playerUrl} target="_">
             {props.gameInfo.homePitcher?.name?.full}
           </a>
+          </Row>
+          <Row>
+            <PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats>
+          </Row>
         </Col>
       </Row>
     </Col>
@@ -248,4 +265,14 @@ function TeamStat(props) {
       {props.statLabel}: {props.gameInfo[props.team][props.statName]}
     </Row>
   );
+}
+
+function PitcherStats(props) {
+  const {pitcher} = props;
+  if (!pitcher) {
+    return null;
+  }
+  return (
+    <p className="pitcher-stats"><span className='bold'>{pitcher.stats.innings_pitched}</span> IP, <span className='bold'>{pitcher.stats.era}</span> ERA, <span className='bold'>{pitcher.stats.strikeouts}</span> SO</p>
+  )
 }

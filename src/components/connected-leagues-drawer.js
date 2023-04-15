@@ -4,14 +4,14 @@ import AddLeagueButton from "./add-league-button";
 
 
 const ConnectedLeaguesDrawer = (props) => {
-    const {show, setShow, showFreeAgents, openCreateLeague, userLeagues } = props;
+    const {show, setShow, showFreeAgents, openCreateLeague, userLeagues, deleteLeague } = props;
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
 
     const renderLeaguesTable = () => {
-        return <ConnectedLeagues showFreeAgents={showFreeAgents} toggleModal={openCreateLeague} userLeagues={userLeagues}></ConnectedLeagues>;
+        return <ConnectedLeagues deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} toggleModal={openCreateLeague} userLeagues={userLeagues}></ConnectedLeagues>;
     }
 
     const renderEmptyLeaguesView = () => {
@@ -24,7 +24,7 @@ const ConnectedLeaguesDrawer = (props) => {
     }
 
     return (
-    <Offcanvas transition={true} direction="start" isOpen={show} backdrop={false}  unmountOnClose={false}>
+    <Offcanvas direction="start" isOpen={show} backdrop={false}  unmountOnClose={false}>
         <OffcanvasHeader><Button className="drawer-hide-button" onClick={handleClose}>Hide</Button></OffcanvasHeader>
         <OffcanvasBody>
         {userLeagues?.length > 0 ? renderLeaguesTable() : renderEmptyLeaguesView()} 
