@@ -1,4 +1,5 @@
 import { Row } from 'reactstrap'
+import { useRef, useEffect } from 'react';
 
 const IntegrationReadiness = (props) => {
     return (
@@ -12,6 +13,12 @@ export default IntegrationReadiness;
 
 
 const LeagueIdForm = (props) => {
+    const inputReference = useRef(null);
+
+    useEffect(() => {
+        inputReference.current.focus();
+    }, []);
+
     return (
         <div className='league-id-form'>
             <div className="league-id-container"><img className="league-id-img" src={`${process.env.PUBLIC_URL}/LeagueId.png`}></img></div>
@@ -22,7 +29,7 @@ const LeagueIdForm = (props) => {
             <p>Then your league id is <span className="url-display">92842</span></p>
             <hr></hr>
             <h4>Enter League Id Here:</h4>
-            <input type="text" placeholder="12345" onChange={e => props.setLeagueId(e.target.value)}></input>
+            <input type="text" ref={inputReference} placeholder="12345" onChange={e => props.setLeagueId(e.target.value)}></input>
         </div>
     )
 }

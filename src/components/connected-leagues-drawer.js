@@ -11,7 +11,12 @@ const ConnectedLeaguesDrawer = (props) => {
 
 
     const renderLeaguesTable = () => {
-        return <ConnectedLeagues deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} toggleModal={openCreateLeague} userLeagues={userLeagues}></ConnectedLeagues>;
+        return (
+        <div>
+            <div className="text-align-center"><h4>Connected Leagues</h4></div>
+            <ConnectedLeagues closeDrawer={handleClose} deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} toggleModal={openCreateLeague} userLeagues={userLeagues}></ConnectedLeagues>
+        </div>
+            );
     }
 
     const renderEmptyLeaguesView = () => {

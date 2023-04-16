@@ -142,8 +142,6 @@ function ProjectedStarters() {
     setToken(null)
   }
 
-
-  const canUseLeagueData = userLeagues && userLeagues[0]?.league_id;
   // console.log(JSON.stringify(data))
   const rows = data.map((gameDay, index) => {
     return (
@@ -160,7 +158,11 @@ function ProjectedStarters() {
   }
 
   const renderConnectLeagueInstructions = () => {
-    return <div className="mock-data-container"><h4>Connect a League</h4><AddLeagueButton onClick={createLeague}></AddLeagueButton></div>
+    return <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={createLeague}></AddLeagueButton></div>
+  }
+
+  const renderTitle = () => {
+    return (<h2>Free Agent Probable Pitchers {activeLeagueId ? `(League ${activeLeagueId})`: ""}</h2>)
   }
 
   return (
@@ -168,11 +170,11 @@ function ProjectedStarters() {
       <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer>
       
       <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
-      <Button onClick={() => setShowDrawer(!showDrawer)}>Show</Button>
+      {/* <Button className="show-drawer" color="info" onClick={() => setShowDrawer(!showDrawer)}>Show Leagues</Button> */}
       <YahooConnectionModal submitLeagueId={createLeague} setLeagueId={setLeagueId} leagueIds={userLeagues} modal={modal} toggle={toggleModal}></YahooConnectionModal>
       <div className="container">
-        <h2>Free Agent Probable Pitchers {activeLeagueId ? `(League ${activeLeagueId})`: ""}</h2>
-        {canUseLeagueData || isLoading ? null : renderConnectLeagueInstructions()}
+        {userLeagues?.length > 0 ?  renderTitle() : null}
+        {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
         {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
 
       </div>
