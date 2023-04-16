@@ -58,13 +58,13 @@ a:hover {
 
 .team-info {
   background-color: #ECECEC;
-  height: 120px;
 }
+
 
 .team-abbr {
   display: inline-block;
   font-weight: bolder;
-  font-size: large;
+  font-size: x-large;
 }
 
 .team-stat {
@@ -186,6 +186,18 @@ a:hover {
 }
 span.bold {
   font-weight: 550;
+}
+
+.hitting-team-logo {
+  height: 25px;
+}
+.logo-row {
+  /* padding-top:5px; */
+}
+
+.team-record {
+  font-size: x-small;
+  padding-top: 3px;
 }
 
 /* .offcanvas {

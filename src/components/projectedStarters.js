@@ -14,7 +14,7 @@ import ConnectedLeaguesDrawer from './connected-leagues-drawer';
 import { getUserLeagues, createUserLeague, deleteUserLeague } from '../api/user-leagues';
 import { LeagueTypes } from '../enums';
 import AddLeagueButton from './add-league-button';
-
+import { getLogoId } from '../mlb-team-logos/logo-mapper';
 
 
 
@@ -106,7 +106,7 @@ function ProjectedStarters() {
     console.log(`Deleting league with id: ${leagueId}`);
     const response = await deleteUserLeague(token, leagueId);
     if (response.success) {
-      console.log(response)
+      // console.log(response)
       setUserLeagues(response.data);
     } else {
       handleUnautorized(response.error);
@@ -144,7 +144,7 @@ function ProjectedStarters() {
 
 
   const canUseLeagueData = userLeagues && userLeagues[0]?.league_id;
-  console.log(JSON.stringify(data))
+  // console.log(JSON.stringify(data))
   const rows = data.map((gameDay, index) => {
     return (
       <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
@@ -198,40 +198,53 @@ function Game(props) {
   return (
     <Col className="game-tile">
       <Row className="team-info">
-        <Col>
-          <Row className="team-abbr">{props.gameInfo.awayTeam.teamAbbr}</Row>
-          <hr></hr>
-          <TeamStat
-            statLabel="Rs Rank"
-            statName="runsRank"
-            team="awayTeam"
-            gameInfo={props.gameInfo}
-          ></TeamStat>
-          <TeamStat
-            statLabel="SO Rank"
-            statName="strikeoutsRank"
-            team="awayTeam"
-            gameInfo={props.gameInfo}
-          ></TeamStat>
-        </Col>
+        <Col className="team-abbr">{props.gameInfo.awayTeam.teamAbbr}</Col><Col></Col><Col className="team-abbr">{props.gameInfo.homeTeam.teamAbbr}</Col>
+      </Row>
+      <Row className="team-info logo-row">
+        <Col><img className="hitting-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.gameInfo.awayTeam.teamAbbr)}.svg`}></img></Col>
         <Col>@</Col>
+        <Col><img className="hitting-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.gameInfo.homeTeam.teamAbbr)}.svg`}></img></Col>
+      </Row>
+      <Row className="team-info logo-row">
+        <Col className="team-record">{`(${props.gameInfo.awayTeam.wins} - ${props.gameInfo.awayTeam.losses})`}</Col>
+        <Col></Col>
+        <Col className="team-record">{`(${props.gameInfo.homeTeam.wins} - ${props.gameInfo.homeTeam.losses})`}</Col>
+      </Row>
+      <Row className="team-info">
+        <Col>          
+          <TeamStat
+              statLabel="R's"
+              statName="runsRank"
+              team="awayTeam"
+              gameInfo={props.gameInfo}>
+          </TeamStat>
+        </Col>
+        <Col></Col>
         <Col>
-          <Row className="team-abbr">{props.gameInfo.homeTeam.teamAbbr}</Row>{' '}
-          <hr></hr>
           <TeamStat
-            statLabel="Rs Rank"
-            statName="runsRank"
-            team="homeTeam"
-            gameInfo={props.gameInfo}
-          ></TeamStat>
-          <TeamStat
-            statLabel="SO Rank"
-            statName="strikeoutsRank"
-            team="homeTeam"
-            gameInfo={props.gameInfo}
-          ></TeamStat>
+              statLabel="R's"
+              statName="runsRank"
+              team="homeTeam"
+              gameInfo={props.gameInfo}
+            ></TeamStat>
         </Col>
       </Row>
+      <Row className="team-info">
+        <Col><TeamStat
+            statLabel="K's"
+            statName="strikeoutsRank"
+            team="awayTeam"
+            gameInfo={props.gameInfo}
+          ></TeamStat></Col>
+        <Col></Col>
+        <Col> <TeamStat
+            statLabel="K's"
+            statName="strikeoutsRank"
+            team="homeTeam"
+            gameInfo={props.gameInfo}
+          ></TeamStat></Col>
+      </Row>
+
       <hr></hr>
       <Row>
         <Col>
@@ -262,9 +275,21 @@ function Game(props) {
 function TeamStat(props) {
   return (
     <Row className="team-stat">
-      {props.statLabel}: {props.gameInfo[props.team][props.statName]}
+      {`${props.statLabel}: ${props.gameInfo[props.team][props.statName]}${getEnding(props.gameInfo[props.team][props.statName])}`}
     </Row>
   );
+}
+
+const getEnding = (rank) => {
+  if (rank === 1) {
+    return "st";
+  } else if (rank === 2) {
+    return "nd"
+  } else if (rank === 3) {
+    return "rd"
+  } else {
+    return "th"
+  }
 }
 
 function PitcherStats(props) {
