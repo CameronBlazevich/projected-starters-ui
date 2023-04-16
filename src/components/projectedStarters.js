@@ -204,8 +204,10 @@ function ProjectedStarters() {
     }
     return (
       <Row className='text-align-center'>
-      <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={toggleModal}></AddLeagueButton></div>
-    </Row>
+        <Col sm="8">
+            <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={toggleModal}></AddLeagueButton></div>
+        </Col>
+      </Row>
     )
   }
 
