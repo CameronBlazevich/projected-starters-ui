@@ -247,29 +247,28 @@ function Game(props) {
 
       <hr></hr>
       <Row>
-        <Col>
-          <Row>
-          <a className="player-name-link" href={props.gameInfo.awayPitcher?.playerUrl} target="_">
-            {props.gameInfo.awayPitcher?.name?.full}
-          </a>
-          </Row>
-          <Row>
-            <PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats>
-          </Row>
-        </Col>
-        <Col>
-          <Row>
-          <a className="player-name-link" href={props.gameInfo.homePitcher?.playerUrl} target="_">
-            {props.gameInfo.homePitcher?.name?.full}
-          </a>
-          </Row>
-          <Row>
-            <PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats>
-          </Row>
-        </Col>
+        <Col>{props.gameInfo.awayPitcher?.imageUrl ? renderPlayerImage(props.gameInfo.awayPitcher.imageUrl) : null}</Col>
+        <Col>{props.gameInfo.homePitcher?.imageUrl ? renderPlayerImage(props.gameInfo.homePitcher.imageUrl) : null}</Col>
       </Row>
+      <Row>
+        <Col><a className="player-name-link" href={props.gameInfo.awayPitcher?.playerUrl} target="_">
+            {props.gameInfo.awayPitcher?.name?.full}
+          </a></Col>
+        <Col><a className="player-name-link" href={props.gameInfo.homePitcher?.playerUrl} target="_">
+            {props.gameInfo.homePitcher?.name?.full}
+          </a></Col>
+      </Row>
+      <Row>
+        <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
+        <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
+      </Row>
+      
     </Col>
   );
+}
+
+const renderPlayerImage = (playerUrl) => {
+  return <img src={playerUrl}></img>
 }
 
 function TeamStat(props) {

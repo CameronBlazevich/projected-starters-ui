@@ -6,7 +6,7 @@ export default async function getData(token, leagueId) {
         return createSuccessResponse(mockData);
     }
     try {
-         return createSuccessResponse(mockData)
+        //  return createSuccessResponse(mockData)
 
         const baseUrl = process.env.REACT_APP_API_URL;
         // console.log(`calling getData with token: ${token}`)
