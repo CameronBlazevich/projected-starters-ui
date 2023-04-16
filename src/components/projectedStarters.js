@@ -14,6 +14,7 @@ import { getUserLeagues, createUserLeague, deleteUserLeague } from '../api/user-
 import { LeagueTypes } from '../enums';
 import AddLeagueButton from './add-league-button';
 import { getLogoId } from '../mlb-team-logos/logo-mapper';
+import RegisterContainer from './auth/register-container';
 
 
 
@@ -120,6 +121,8 @@ function ProjectedStarters() {
   }
 
   if (!token) {
+    return <RegisterContainer setToken={handleNewToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></RegisterContainer>
+
     return <div className="container"><Login setToken={handleNewToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
   }
 

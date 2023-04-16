@@ -135,8 +135,6 @@ a:hover {
   padding: 5px;
   border-style: solid;
   border-color: blue;
-  margin-top:50px
-
 }
 
 .app-preview-image {
@@ -223,7 +221,31 @@ button.show-drawer {
   min-width: fit-content;
 }
 
+.landing-page {
+  padding:15px;
+  background-image: url(https://s.yimg.com/dh/ap/fantasy/img/background-baseball@2x.jpg?v=1);
+  height: 100vh;
+  width: 100vw;
+}
 
+.landing-page-content {
+  position: relative;
+  top: 20%;
+  
+}
+
+.white-text-black-outline {
+  color:white;
+  text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+}
+
+.app-sample-img {
+  width: 400px;
+}
 
 /* .offcanvas {
   transform: translateX(-100%);
