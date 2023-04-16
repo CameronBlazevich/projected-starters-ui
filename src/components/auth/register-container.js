@@ -24,7 +24,7 @@ const RegisterContainer = (props) => {
                 </ul>
                 <Login setToken={setToken} registerFlag={registerFlag} setRegisterFlag={setRegisterFlag}></Login>
                 </Col>
-                <Col sm="4"><img className="app-sample-img" src={`${process.env.PUBLIC_URL}/app-sample-1.png`}></img></Col>
+                <Col className="d-none d-lg-block" sm="4"><img className="app-sample-img" src={`${process.env.PUBLIC_URL}/app-sample-1.png`}></img></Col>
             </Row>
     </div>
     )
