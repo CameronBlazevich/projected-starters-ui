@@ -202,7 +202,11 @@ function ProjectedStarters() {
     if (Object.keys(error)?.length > 0 ) {
     clearErrors()
     }
-    return <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={toggleModal}></AddLeagueButton></div>
+    return (
+      <Row className='text-align-center'>
+      <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={toggleModal}></AddLeagueButton></div>
+    </Row>
+    )
   }
 
   const renderTitle = () => {
