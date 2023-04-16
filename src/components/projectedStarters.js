@@ -153,7 +153,15 @@ function ProjectedStarters() {
     return <LoadingIndicator></LoadingIndicator>
   }
 
+  const renderShowFreeAgentInstructions = () => {
+    return <div><p>Click "Show" next to one of your Leagues to see some free agents.</p></div>
+  }
+
   const renderProjectedStarters = () => {
+    if (rows?.length === 0 && userLeagues?.length > 0) {
+      return renderShowFreeAgentInstructions()  
+    } 
+
     return <div className="projected-starters">{rows}</div>
   }
 
@@ -167,17 +175,22 @@ function ProjectedStarters() {
 
   return (
     <div>
-      <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer>
+      
       
       <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
       {/* <Button className="show-drawer" color="info" onClick={() => setShowDrawer(!showDrawer)}>Show Leagues</Button> */}
       <YahooConnectionModal submitLeagueId={createLeague} setLeagueId={setLeagueId} leagueIds={userLeagues} modal={modal} toggle={toggleModal}></YahooConnectionModal>
-      <div className="container">
-        {userLeagues?.length > 0 ?  renderTitle() : null}
-        {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
-        {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
+      <Row>
+        <Col sm="2" className="side-panel">
 
-      </div>
+          <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer></Col>
+
+        <Col>
+          {userLeagues?.length > 0 ?  renderTitle() : null}
+          {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
+          {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
+        </Col>
+      </Row>
     </div>)
 }
 

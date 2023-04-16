@@ -123,7 +123,7 @@ a:hover {
   padding: 5px;
   position: absolute;
   top: 10%;
-  left: 50%;
+  left: 45%;
   margin-top: -50px;
   margin-left: -50px;
   z-index: 1;
@@ -173,8 +173,13 @@ a:hover {
   min-width: fit-content;
   max-width: fit-content;
   text-align: center;
-  margin:5px;
+  margin:8px;
+  margin-top: 4px;
   float:left;
+}
+
+.connected-leagues-header {
+  margin-top: 5px
 }
 
 .drawer-hide-button {

@@ -14,7 +14,7 @@ const ConnectedLeagues = (props) => {
     const tableRows = userLeagues.map((league, index) => {
         return (
             <tr key={index}>
-                <td><Button onClick={() => handleClick(league.league_id)} color="success" size="sm">Show FAs</Button></td>
+                <td><Button onClick={() => handleClick(league.league_id)} color="success" size="sm">Show</Button></td>
                 <td>{league.league_id}</td>
                 <td>{leagueIdMap[league.league_type_id]}</td>
                 <td><Button size="sm" color="danger" onClick={() => deleteLeague(league.league_id)}>Remove</Button></td>
@@ -28,8 +28,8 @@ const ConnectedLeagues = (props) => {
             <thead>
                 <tr>
                     <th></th>
-                    <th>League Id</th>
-                    <th>League Type</th>
+                    <th>Id</th>
+                    <th>Type</th>
                     <th></th>
                 </tr>
             </thead>
