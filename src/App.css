@@ -121,7 +121,7 @@ a:hover {
   max-width: fit-content;
   display: inline-block;
   padding: 5px;
-  position: absolute;
+  position: relative;
   top: 10%;
   left: 45%;
   margin-top: -50px;
@@ -230,7 +230,6 @@ button.show-drawer {
 
 .landing-page-content {
   position: relative;
-  top: 20%;
   
 }
 
