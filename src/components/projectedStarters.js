@@ -9,7 +9,6 @@ import { setCode } from '../api/yahoo-integration-info';
 import AppHeader from './app-header';
 import LoadingIndicator from './loading-indicator';
 import YahooConnectionModal from './yahoo/connection-modal';
-import ConnectedLeagues from './connected-leagues'
 import ConnectedLeaguesDrawer from './connected-leagues-drawer';
 import { getUserLeagues, createUserLeague, deleteUserLeague } from '../api/user-leagues';
 import { LeagueTypes } from '../enums';
@@ -31,8 +30,8 @@ function ProjectedStarters() {
   const [activeLeagueId, setActiveLeagueId] = useState()
   const [showDrawer, setShowDrawer] = useState(false);
   const [leagueId, setLeagueId] = useState();
+  const [error, setError] = useState({});
   const toggleModal = () => setModal(!modal);
-
 
 
   useEffect(() => {
@@ -83,6 +82,9 @@ function ProjectedStarters() {
     }
   }
 
+  const clearErrors = () => {
+    setError({})
+  }
 
   const toggleRegisterFlag = (isRegistering) => {
     setRegisterFlag(isRegistering);
@@ -108,6 +110,7 @@ function ProjectedStarters() {
     if (response.success) {
       // console.log(response)
       setUserLeagues(response.data);
+      setData([])
     } else {
       handleUnautorized(response.error);
       // ToDo: handle error
@@ -127,8 +130,10 @@ function ProjectedStarters() {
     if (response.success) {
     setData(response.data)
     } else {
-      // ToDo: handle error
       console.log(response.error)
+      handleUnautorized(response.error);
+      
+      setError("yahoo-authentication")
     }
     setLoading(false)
   }
@@ -139,7 +144,13 @@ function ProjectedStarters() {
     return userToken?.email
   }
   const logout = () => {
-    setToken(null)
+    setToken(null);
+    setData([]);
+    setUserLeagues([]);
+    setActiveLeagueId(null);
+    setError({});
+    setEmail(null);
+
   }
 
   // console.log(JSON.stringify(data))
@@ -157,7 +168,26 @@ function ProjectedStarters() {
     return <div><p>Click "Show" next to one of your Leagues to see some free agents.</p></div>
   }
 
+  const renderYahooAuthenticationFailure = () => {
+    return (
+    <Row className="yahoo-authentication-failure">
+      <Col>
+      <p>There was an issue with your Yahoo account.</p>
+      <p>Click the "Yahoo" button in the upper-right to authenticate.</p>
+      </Col>
+    </Row>
+    )
+
+  }
+
   const renderProjectedStarters = () => {
+    if (error === "yahoo-authentication") {
+      return renderYahooAuthenticationFailure()
+    }
+    if (userLeagues?.length === 0) {
+      return null;
+    }
+
     if (rows?.length === 0 && userLeagues?.length > 0) {
       return renderShowFreeAgentInstructions()  
     } 
@@ -166,7 +196,10 @@ function ProjectedStarters() {
   }
 
   const renderConnectLeagueInstructions = () => {
-    return <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={createLeague}></AddLeagueButton></div>
+    if (Object.keys(error)?.length > 0 ) {
+    clearErrors()
+    }
+    return <div className="welcome"><h4>Welcome</h4><p>Connect a League to Get Started</p><AddLeagueButton onClick={toggleModal}></AddLeagueButton></div>
   }
 
   const renderTitle = () => {
