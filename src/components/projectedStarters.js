@@ -201,7 +201,7 @@ function ProjectedStarters() {
   }
 
   const renderProjectedStarters = (playerData, title) => {
-    if (error === "yahoo-authentication" && title === "Free Agent Scheduled Starters") { //hack with title to show only once
+    if (error === "yahoo-authentication") { 
       return renderYahooAuthenticationFailure()
     }
     if (userLeagues?.length === 0) {
