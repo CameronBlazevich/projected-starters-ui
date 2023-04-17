@@ -14,12 +14,14 @@ import { LeagueTypes } from '../enums';
 import AddLeagueButton from './add-league-button';
 import { getLogoId } from '../mlb-team-logos/logo-mapper';
 import RegisterContainer from './auth/register-container';
+import {getRosteredProbablePitchers} from '../api/user-teams'
 
 
 
 function ProjectedStarters() {
 
   const [data, setData] = useState([]);
+  const [rosteredProbablePitchers, setRosteredProbablyPitchers] = useState([]);
   const { token, setToken } = useToken();
   const [registerFlag, setRegisterFlag] = useState(false);
   const { email, setEmail } = useEmail();
@@ -133,6 +135,13 @@ function ProjectedStarters() {
   const showFreeAgents = async (leagueId) => {
     setLoading(true);
     setActiveLeagueId(leagueId);
+    const rosteredPitcherInfo = await getRosteredProbablePitchers(token, leagueId);
+    if (rosteredPitcherInfo.success) {
+      setRosteredProbablyPitchers(rosteredPitcherInfo.data);
+    } else {
+      //ToDo: handle error
+      console.error(rosteredPitcherInfo.error)
+    }
     const response = await getData(token, leagueId);
     if (response.success) {
     setData(response.data)
@@ -161,11 +170,7 @@ function ProjectedStarters() {
   }
 
   // console.log(JSON.stringify(data))
-  const rows = data.map((gameDay, index) => {
-    return (
-      <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
-    );
-  });
+
 
   const renderLoadingIndicator = () => {
     return <LoadingIndicator></LoadingIndicator>
@@ -187,7 +192,7 @@ function ProjectedStarters() {
 
   }
 
-  const renderProjectedStarters = () => {
+  const renderProjectedStarters = (playerData) => {
     if (error === "yahoo-authentication") {
       return renderYahooAuthenticationFailure()
     }
@@ -195,11 +200,17 @@ function ProjectedStarters() {
       return null;
     }
 
-    if (rows?.length === 0 && userLeagues?.length > 0) {
+    const gameRows = playerData.map((gameDay, index) => {
+      return (
+        <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
+      );
+    });
+
+    if (gameRows?.length === 0 && userLeagues?.length > 0) {
       return renderShowFreeAgentInstructions()  
     } 
 
-    return <div className="projected-starters">{rows}</div>
+    return <div className="projected-starters">{gameRows}</div>
   }
 
   const renderConnectLeagueInstructions = () => {
@@ -215,8 +226,8 @@ function ProjectedStarters() {
     )
   }
 
-  const renderTitle = () => {
-    return (<h2>Free Agent Probable Pitchers {activeLeagueId ? `(League ${activeLeagueId})`: ""}</h2>)
+  const renderTitle = (text) => {
+    return (<h2>{`${text} Probable Pitchers`} {activeLeagueId ? `(League ${activeLeagueId})`: ""}</h2>)
   }
 
   return (
@@ -232,9 +243,11 @@ function ProjectedStarters() {
           <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer></Col>
 
         <Col>
-          {userLeagues?.length > 0 ?  renderTitle() : null}
+          {userLeagues?.length > 0 ?  renderTitle("Free Agent") : null}
           {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
-          {isLoading ? renderLoadingIndicator() : renderProjectedStarters()}
+          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(data)}
+          {userLeagues?.length > 0 ?  renderTitle("My Team's") : null}
+          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers)}
         </Col>
       </Row>
     </div>)

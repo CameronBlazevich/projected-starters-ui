@@ -14,7 +14,7 @@ const RegisterContainer = (props) => {
             <Row className="landing-page-content white-text-black-outline">
                 <Col sm="2"></Col>
                 <Col sm="4">
-                <h3>Quickly find YOUR league's available players that have favorable matchups.</h3>
+                <h3>Quickly find YOUR league's available pitchers that have favorable matchups.</h3>
                 <p></p>
                 <p>Our app integrates with your Fantasy League to provide <strong>real-time, league specific </strong>data</p>
                 <h5>Sign up now to immediately double your effectiveness as a manager.</h5>
