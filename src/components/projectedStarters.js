@@ -12,16 +12,18 @@ import ConnectedLeaguesDrawer from './connected-leagues-drawer';
 import { getUserLeagues, createUserLeague, deleteUserLeague } from '../api/user-leagues';
 import { LeagueTypes } from '../enums';
 import AddLeagueButton from './add-league-button';
-import { getLogoId } from '../mlb-team-logos/logo-mapper';
 import RegisterContainer from './auth/register-container';
 import {getRosteredProbablePitchers} from '../api/user-teams'
+
+
+import CollapsibleGamesContainer from './games/collapsible-games-container'
 
 
 
 function ProjectedStarters() {
 
   const [data, setData] = useState([]);
-  const [rosteredProbablePitchers, setRosteredProbablyPitchers] = useState([]);
+  const [rosteredProbablePitchers, setRosteredProbablePitchers] = useState([]);
   const { token, setToken } = useToken();
   const [registerFlag, setRegisterFlag] = useState(false);
   const { email, setEmail } = useEmail();
@@ -137,7 +139,7 @@ function ProjectedStarters() {
     setActiveLeagueId(leagueId);
     const rosteredPitcherInfo = await getRosteredProbablePitchers(token, leagueId);
     if (rosteredPitcherInfo.success) {
-      setRosteredProbablyPitchers(rosteredPitcherInfo.data);
+      setRosteredProbablePitchers(rosteredPitcherInfo.data);
     } else {
       //ToDo: handle error
       console.error(rosteredPitcherInfo.error)
@@ -161,12 +163,18 @@ function ProjectedStarters() {
   }
   const logout = () => {
     setToken(null);
+    resetState();
+
+  }
+
+  const resetState = () => {
+
     setData([]);
     setUserLeagues([]);
     setActiveLeagueId(null);
     setError({});
     setEmail(null);
-
+    setRosteredProbablePitchers([])
   }
 
   // console.log(JSON.stringify(data))
@@ -177,7 +185,7 @@ function ProjectedStarters() {
   }
 
   const renderShowFreeAgentInstructions = () => {
-    return <div><p>Click "Show" next to one of your Leagues to see some free agents.</p></div>
+    return <div className="show-free-agent-instructions"><p>Click "Show" next to one of your Leagues to see some projected starters.</p></div>
   }
 
   const renderYahooAuthenticationFailure = () => {
@@ -192,7 +200,7 @@ function ProjectedStarters() {
 
   }
 
-  const renderProjectedStarters = (playerData) => {
+  const renderProjectedStarters = (playerData, title) => {
     if (error === "yahoo-authentication") {
       return renderYahooAuthenticationFailure()
     }
@@ -200,17 +208,10 @@ function ProjectedStarters() {
       return null;
     }
 
-    const gameRows = playerData.map((gameDay, index) => {
-      return (
-        <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
-      );
-    });
 
-    if (gameRows?.length === 0 && userLeagues?.length > 0) {
-      return renderShowFreeAgentInstructions()  
-    } 
-
-    return <div className="projected-starters">{gameRows}</div>
+    return (
+      <CollapsibleGamesContainer playerData={playerData} title={title} leagueId={activeLeagueId}></CollapsibleGamesContainer>
+    )
   }
 
   const renderConnectLeagueInstructions = () => {
@@ -226,14 +227,9 @@ function ProjectedStarters() {
     )
   }
 
-  const renderTitle = (text) => {
-    return (<h2>{`${text} Probable Pitchers`} {activeLeagueId ? `(League ${activeLeagueId})`: ""}</h2>)
-  }
 
   return (
     <div>
-      
-      
       <AppHeader logout={logout} email={email} toggleModal={toggleModal}></AppHeader>
       {/* <Button className="show-drawer" color="info" onClick={() => setShowDrawer(!showDrawer)}>Show Leagues</Button> */}
       <YahooConnectionModal submitLeagueId={createLeague} setLeagueId={setLeagueId} leagueIds={userLeagues} modal={modal} toggle={toggleModal}></YahooConnectionModal>
@@ -243,11 +239,10 @@ function ProjectedStarters() {
           <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer></Col>
 
         <Col>
-          {userLeagues?.length > 0 ?  renderTitle("Free Agent") : null}
           {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
-          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(data)}
-          {userLeagues?.length > 0 ?  renderTitle("My Team's") : null}
-          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers)}
+          {(userLeagues?.length > 0 && data.length === 0 && !isLoading) ? renderShowFreeAgentInstructions() : null}
+          {isLoading ? renderLoadingIndicator() :  renderProjectedStarters(data, "Free Agent Scheduled Starters")}
+          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers, "My Team's Scheduled Starters")}
         </Col>
       </Row>
     </div>)
@@ -255,122 +250,4 @@ function ProjectedStarters() {
 
 export default ProjectedStarters;
 
-function GameRow(props) {
-  const games = props.games.map((game, index) => {
-    return <Game key={index} gameInfo={game}></Game>;
-  });
-  return (
-    <Row className="game-row">
-      <Row className="game-date">{props.gameDate}</Row>
-      <Row>{games}</Row>
-    </Row>
-  );
-}
 
-function Game(props) {
-  // console.log(JSON.stringify(props.gameInfo.awayPitcher))
-  return (
-    <Col className="game-tile">
-      <Row className="team-info">
-        <Col className="team-abbr">{props.gameInfo.awayTeam.teamAbbr}</Col><Col></Col><Col className="team-abbr">{props.gameInfo.homeTeam.teamAbbr}</Col>
-      </Row>
-      <Row className="team-info logo-row">
-        <Col><img className="hitting-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.gameInfo.awayTeam.teamAbbr)}.svg`}></img></Col>
-        <Col>@</Col>
-        <Col><img className="hitting-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.gameInfo.homeTeam.teamAbbr)}.svg`}></img></Col>
-      </Row>
-      <Row className="team-info logo-row">
-        <Col className="team-record">{`(${props.gameInfo.awayTeam.wins} - ${props.gameInfo.awayTeam.losses})`}</Col>
-        <Col></Col>
-        <Col className="team-record">{`(${props.gameInfo.homeTeam.wins} - ${props.gameInfo.homeTeam.losses})`}</Col>
-      </Row>
-      <Row className="team-info">
-        <Col>          
-          <TeamStat
-              statLabel="R's"
-              statName="runsRank"
-              team="awayTeam"
-              gameInfo={props.gameInfo}>
-          </TeamStat>
-        </Col>
-        <Col></Col>
-        <Col>
-          <TeamStat
-              statLabel="R's"
-              statName="runsRank"
-              team="homeTeam"
-              gameInfo={props.gameInfo}
-            ></TeamStat>
-        </Col>
-      </Row>
-      <Row className="team-info">
-        <Col><TeamStat
-            statLabel="K's"
-            statName="strikeoutsRank"
-            team="awayTeam"
-            gameInfo={props.gameInfo}
-          ></TeamStat></Col>
-        <Col></Col>
-        <Col> <TeamStat
-            statLabel="K's"
-            statName="strikeoutsRank"
-            team="homeTeam"
-            gameInfo={props.gameInfo}
-          ></TeamStat></Col>
-      </Row>
-
-      <hr></hr>
-      <Row>
-        <Col>{props.gameInfo.awayPitcher?.imageUrl ? renderPlayerImage(props.gameInfo.awayPitcher.imageUrl) : null}</Col>
-        <Col>{props.gameInfo.homePitcher?.imageUrl ? renderPlayerImage(props.gameInfo.homePitcher.imageUrl) : null}</Col>
-      </Row>
-      <Row>
-        <Col><a className="player-name-link" href={props.gameInfo.awayPitcher?.playerUrl} target="_">
-            {props.gameInfo.awayPitcher?.name?.full}
-          </a></Col>
-        <Col><a className="player-name-link" href={props.gameInfo.homePitcher?.playerUrl} target="_">
-            {props.gameInfo.homePitcher?.name?.full}
-          </a></Col>
-      </Row>
-      <Row>
-        <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
-        <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
-      </Row>
-      
-    </Col>
-  );
-}
-
-const renderPlayerImage = (playerUrl) => {
-  return <img src={playerUrl}></img>
-}
-
-function TeamStat(props) {
-  return (
-    <Row className="team-stat">
-      {`${props.statLabel}: ${props.gameInfo[props.team][props.statName]}${getEnding(props.gameInfo[props.team][props.statName])}`}
-    </Row>
-  );
-}
-
-const getEnding = (rank) => {
-  if (rank === 1) {
-    return "st";
-  } else if (rank === 2) {
-    return "nd"
-  } else if (rank === 3) {
-    return "rd"
-  } else {
-    return "th"
-  }
-}
-
-function PitcherStats(props) {
-  const {pitcher} = props;
-  if (!pitcher) {
-    return null;
-  }
-  return (
-    <p className="pitcher-stats"><span className='bold'>{pitcher.stats.innings_pitched}</span> IP, <span className='bold'>{pitcher.stats.era}</span> ERA, <span className='bold'>{pitcher.stats.strikeouts}</span> SO</p>
-  )
-}
