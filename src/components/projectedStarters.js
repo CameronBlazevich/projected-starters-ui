@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Col, Row, Button } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { useSearchParams } from "react-router-dom";
 import getData from "../api/get-free-agent-starters"
-import Login from './auth/login'
 import useToken from './auth/useToken';
 import useEmail from './auth/useEmail';
 import { setCode } from '../api/yahoo-integration-info';
@@ -44,6 +43,13 @@ function ProjectedStarters() {
           console.log('There is a code in the URL, lets save it...')
           const code = searchParams.get('code');
           const resp = await setCode(token, code)
+          if (resp.success) {
+
+          } else {
+            handleUnautorized(resp.error)
+            //ToDo Handle Error
+          }
+
           setSearchParams(new URLSearchParams())
         }
       }
@@ -122,8 +128,6 @@ function ProjectedStarters() {
 
   if (!token) {
     return <RegisterContainer setToken={handleNewToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></RegisterContainer>
-
-    return <div className="container"><Login setToken={handleNewToken} registerFlag={registerFlag} setRegisterFlag={toggleRegisterFlag}></Login></div>
   }
 
   const showFreeAgents = async (leagueId) => {

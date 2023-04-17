@@ -1,20 +1,19 @@
-import axios from "axios"
 import { createErrorResponse, createSuccessResponse } from "./api-response";
 
-export async function setCode(token, code) {
+
+export async function createTeam(token, teamId, leagueId, teamNickname) {
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
-        // console.log(`calling setCode with token: ${token} and code${code}`)
+        // console.log(`calling setTeamId with token: ${token} and teamId ${teamId}`)
         const config = { "x-access-token": token };
-        const body = { code }
+        const body = { teamId, leagueId, teamNickname }
         const resp = await axios.post(
-            `${baseUrl}/yahoo/setCode`,
+            `${baseUrl}/teams/createTeam`,
             body,
             { headers: config });
         return createSuccessResponse(resp.data);
     } catch (err) {
-        console.error(err)
+        console.error(err);
         return createErrorResponse(err);
     }
 }
-

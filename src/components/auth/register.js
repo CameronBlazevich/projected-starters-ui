@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import AppExplanation from './app-explanation';
 
 export default class Register extends Component {
     constructor(props) {
@@ -64,6 +63,7 @@ export default class Register extends Component {
                 <div className="registration-form">
                     <form onSubmit={this.onSubmit}>
                         <h1>Register Below!</h1>
+                        <div>
                         <input
                             type="email"
                             name="email"
@@ -72,6 +72,8 @@ export default class Register extends Component {
                             onChange={this.handleInputChange}
                             required
                         />
+                        </div>
+                        <div>
                         <input
                             type="password"
                             name="password"
@@ -80,13 +82,12 @@ export default class Register extends Component {
                             onChange={this.handleInputChange}
                             required
                         />
+                        </div>
                         <input type="submit" value="Submit" />
                     </form>
                     <p>Already have an account? <a href="#" onClick={() => this.props.setRegisterFlag(false)}>Login Here</a></p>
                     <p className="error">{this.state.error}</p>
-
                 </div>
-                {/* <AppExplanation></AppExplanation> */}
             </div>
         );
     }

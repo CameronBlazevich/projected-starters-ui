@@ -62,6 +62,7 @@ export default class Login extends Component {
             <div className="login-form">
                 <form onSubmit={this.onSubmit}>
                     <h1>Login Below!</h1>
+                    <div>
                     <input
                         type="email"
                         name="email"
@@ -70,6 +71,8 @@ export default class Login extends Component {
                         onChange={this.handleInputChange}
                         required
                     />
+                    </div>
+                    <div>
                     <input
                         type="password"
                         name="password"
@@ -78,6 +81,7 @@ export default class Login extends Component {
                         onChange={this.handleInputChange}
                         required
                     />
+                    </div>
                     <input type="submit" value="Submit" />
                 </form>
                 <p>No Account? <a href="#" onClick={() => this.props.setRegisterFlag(true)}>Register Here</a></p>
