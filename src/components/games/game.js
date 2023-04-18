@@ -1,11 +1,16 @@
 import {Row, Col} from 'reactstrap'
 import { getLogoId } from '../../mlb-team-logos/logo-mapper'
+import { getParkFactor } from '../../data/park-factors'
+import ParkFactorPopover from './park-factor-popover'
+
 
 function Game(props) {
 
     const renderPlayerImage = (playerUrl) => {
         return <img src={playerUrl}></img>
       }
+
+      const parkData = getParkFactor(props.gameInfo.homeTeam.teamAbbr);
 
     return (
       <Col className="game-tile">
@@ -56,6 +61,11 @@ function Game(props) {
               gameInfo={props.gameInfo}
             ></TeamStat></Col>
         </Row>
+        
+        <Row className="team-info">
+          <Col className="park-factor">{parkData.Venue} <span id={`${parkData.TeamAbbr}`} className='bold park-factor'>PF: {parkData.ParkFactor}</span></Col>
+        </Row>
+        <ParkFactorPopover popoverId={`${parkData.TeamAbbr}`} parkFactor={parkData.ParkFactor}></ParkFactorPopover>
   
         <hr></hr>
         <Row>
@@ -74,7 +84,6 @@ function Game(props) {
           <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
         </Row>
-        
       </Col>
     );
   }
