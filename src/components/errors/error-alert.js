@@ -10,8 +10,8 @@ const ErrorAlert = (props) => {
         props.clearErrors();
         // setVisible(false)
     };
-    const displayMessages = props.messages.map(message => {
-        return (<p>{message}</p>)
+    const displayMessages = props.messages.map((message, index) => {
+        return (<p key={index}>{message}</p>)
     })
 
     return (

@@ -11,6 +11,9 @@
   .justify-center-on-small {
     justify-content: center;
   }
+  .text-align-center-on-small {
+    text-align: center;
+  }
 }
 
 

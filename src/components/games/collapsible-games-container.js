@@ -17,16 +17,16 @@ const CollapsibleGamesContainer = (props) => {
     }
 
     const chevron = isOpen ? 
-        <FontAwesomeIcon icon={faChevronUp} size="2x" onClick={toggle}>Toggle</FontAwesomeIcon> :
-        <FontAwesomeIcon icon={faChevronDown} size="2x" onClick={toggle}>Toggle</FontAwesomeIcon>
+        <FontAwesomeIcon icon={faChevronUp} size="1x" onClick={toggle}>Toggle</FontAwesomeIcon> :
+        <FontAwesomeIcon icon={faChevronDown} size="1x" onClick={toggle}>Toggle</FontAwesomeIcon>
     return (
         <div>
             <div>
-                <div className="inline-block">
-                    <h2>{`${title}`} {leagueId ? `(League ${leagueId})` : ""}{' '}</h2>
+                <div className="inline-block text-align-center-on-small">
+                    <h2>{`${title} `}</h2>
                 </div>
-                <div className="inline-block" style={{marginLeft: '5px'}}>
-                    {chevron}
+                <div className="inline-block text-align-center-on-small">
+                <h2>{leagueId ? `(League ${leagueId})`: ""} {chevron}</h2> 
                     {/* {isOpen ? "Collapse" : "Expand"}  */}
                 </div>
             </div>

@@ -263,6 +263,7 @@ function ProjectedStarters() {
           {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
           {(userLeagues?.length > 0 && data.length === 0 && !isLoading) ? renderShowFreeAgentInstructions() : null}
           {isLoading ? renderLoadingIndicator() :  renderProjectedStarters(data, "Free Agent Scheduled Starters")}
+          {isLoading ? null : <hr></hr>}
           {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers, "My Team's Scheduled Starters")}
         </Col>
     )
