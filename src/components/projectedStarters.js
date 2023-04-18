@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Col, Row } from 'reactstrap';
+import { Col, Row, UncontrolledAlert } from 'reactstrap';
 import { useSearchParams } from "react-router-dom";
 import getData from "../api/get-free-agent-starters"
 import useToken from './auth/useToken';
@@ -17,6 +17,7 @@ import {getRosteredProbablePitchers} from '../api/user-teams'
 
 
 import CollapsibleGamesContainer from './games/collapsible-games-container'
+import ErrorAlert from './errors/error-alert';
 
 
 
@@ -50,7 +51,7 @@ function ProjectedStarters() {
           if (resp.success) {
 
           } else {
-            handleUnautorized(resp.error)
+            handleUnauthorized(resp.error)
             //ToDo Handle Error
           }
 
@@ -73,7 +74,7 @@ function ProjectedStarters() {
         if (userLeaguesResponse.success) {
           setUserLeagues(userLeaguesResponse.data)
         } else {
-          handleUnautorized(userLeaguesResponse.error)
+          handleUnauthorized(userLeaguesResponse.error)
           console.log(`Something went wrong getting user leagues`)
         }
       }
@@ -87,7 +88,14 @@ function ProjectedStarters() {
     setToken(token);
   }
 
-  const handleUnautorized = (error) => {
+  const handleApiError = (error) => {
+    setData([]);
+    setRosteredProbablePitchers([]);
+
+
+  }
+
+  const handleUnauthorized = (error) => {
     if (error && error.response?.status === 401) {
     logout()
     }
@@ -122,8 +130,9 @@ function ProjectedStarters() {
       // console.log(response)
       setUserLeagues(response.data);
       setData([])
+      setRosteredProbablePitchers([]);
     } else {
-      handleUnautorized(response.error);
+      handleUnauthorized(response.error);
       // ToDo: handle error
       console.error(response.error)
     }
@@ -149,7 +158,7 @@ function ProjectedStarters() {
     setData(response.data)
     } else {
       console.log(response.error)
-      handleUnautorized(response.error);
+      handleUnauthorized(response.error);
       
       setError("yahoo-authentication")
     }
@@ -189,25 +198,41 @@ function ProjectedStarters() {
   }
 
   const renderYahooAuthenticationFailure = () => {
+    const messageLine1 = "There was an issue with your Yahoo account."
+    const messageLine2 = "Click the \"Yahoo\" button in the upper-right to authenticate.";
+    
+    const messageLines = [messageLine1, messageLine2];
     return (
-    <Row className="yahoo-authentication-failure">
-      <Col>
-      <p>There was an issue with your Yahoo account.</p>
-      <p>Click the "Yahoo" button in the upper-right to authenticate.</p>
-      </Col>
-    </Row>
+    <div className="fit-content">
+      <ErrorAlert clearErrors={clearErrors} messages={messageLines}></ErrorAlert>
+    </div>
     )
+  }
 
+  const renderGenericError = () => {
+    return (
+      <Row className="generic-error">
+        <Col className="fit-content error-message">
+        <p>Something went wrong.</p>
+        <p>Please try again.</p>
+        </Col>
+      </Row>
+      )
+  }
+
+  const renderErrorMessage = (error) => {
+    if (error === "yahoo-authentication") { 
+      return renderYahooAuthenticationFailure()
+    } else {
+      return renderGenericError();
+    }
   }
 
   const renderProjectedStarters = (playerData, title) => {
-    if (error === "yahoo-authentication") { 
-      return renderYahooAuthenticationFailure()
-    }
+    
     if (userLeagues?.length === 0) {
       return null;
     }
-
 
     return (
       <CollapsibleGamesContainer playerData={playerData} title={title} leagueId={activeLeagueId}></CollapsibleGamesContainer>
@@ -227,6 +252,22 @@ function ProjectedStarters() {
     )
   }
 
+  const renderFreeAgentsAndRosteredScheduledStarters = () => {
+    if (Object.keys(error)?.length > 0 ) {
+      return renderErrorMessage(error);
+    }
+
+    console.log(`Data Data: ${data}`)
+    return (
+      <Col>
+          {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
+          {(userLeagues?.length > 0 && data.length === 0 && !isLoading) ? renderShowFreeAgentInstructions() : null}
+          {isLoading ? renderLoadingIndicator() :  renderProjectedStarters(data, "Free Agent Scheduled Starters")}
+          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers, "My Team's Scheduled Starters")}
+        </Col>
+    )
+  }
+
 
   return (
     <div>
@@ -234,16 +275,12 @@ function ProjectedStarters() {
       {/* <Button className="show-drawer" color="info" onClick={() => setShowDrawer(!showDrawer)}>Show Leagues</Button> */}
       <YahooConnectionModal submitLeagueId={createLeague} setLeagueId={setLeagueId} leagueIds={userLeagues} modal={modal} toggle={toggleModal}></YahooConnectionModal>
       <Row>
-        <Col sm="2" className="side-panel">
+        <Col lg="3" className="side-panel">
 
-          <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer></Col>
-
-        <Col>
-          {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
-          {(userLeagues?.length > 0 && data.length === 0 && !isLoading) ? renderShowFreeAgentInstructions() : null}
-          {isLoading ? renderLoadingIndicator() :  renderProjectedStarters(data, "Free Agent Scheduled Starters")}
-          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers, "My Team's Scheduled Starters")}
+          <ConnectedLeaguesDrawer deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} openCreateLeague={toggleModal} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ConnectedLeaguesDrawer>
         </Col>
+        {renderFreeAgentsAndRosteredScheduledStarters()}
+        
       </Row>
     </div>)
 }

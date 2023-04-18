@@ -1,5 +1,7 @@
 import { Table, Button } from "reactstrap";
 import AddLeagueButton from "./add-league-button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 const ConnectedLeagues = (props) => {
     const {userLeagues, toggleModal, showFreeAgents, deleteLeague, closeDrawer} = props; 
@@ -17,14 +19,14 @@ const ConnectedLeagues = (props) => {
                 <td><Button onClick={() => handleClick(league.league_id)} color="success" size="sm">Show</Button></td>
                 <td>{league.league_id}</td>
                 <td>{leagueIdMap[league.league_type_id]}</td>
-                <td><Button size="sm" color="danger" onClick={() => deleteLeague(league.league_id)}>Remove</Button></td>
+                <td><FontAwesomeIcon icon={faTrash} size="1x" onClick={() => deleteLeague(league.league_id)}>Remove</FontAwesomeIcon></td>
             </tr>
         )
     }); 
 
     return (
     <div className="connected-leagues-container">
-        <Table striped bordered hover>
+        <Table size="sm" striped bordered hover>
             <thead>
                 <tr>
                     <th></th>
@@ -35,14 +37,9 @@ const ConnectedLeagues = (props) => {
             </thead>
             <tbody>
                 {tableRows}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><AddLeagueButton onClick={toggleModal}></AddLeagueButton></td>
-                </tr>
             </tbody>
         </Table>
+        <AddLeagueButton floatRight onClick={toggleModal}></AddLeagueButton>
     </div>
     )
 }

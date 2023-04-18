@@ -9,7 +9,7 @@ function GameRow(props) {
     return (
       <Row className="game-row">
         <Row className="game-date">{props.gameDate}</Row>
-        <Row>{games}</Row>
+        <Row className="justify-center-on-small">{games}</Row>
       </Row>
     );
   }
