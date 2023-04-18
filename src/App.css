@@ -159,12 +159,13 @@ a:hover {
 }
 
 .league-id-img {
-  width: 350px;
+  width: 340px;
 }
 
 .url-display {
-  background-color: lightgray;
+  background-color: #ededed;
   padding:2px;
+  font-size: smaller;
 }
 
 .league-id-form {

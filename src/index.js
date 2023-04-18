@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import App from './App';
+import TeamStats from './components/containers/team-stats'
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <BrowserRouter>
-    <App />
+<Routes>
+        {/* <Route path="/" element={<Layout />}> */}
+          <Route index element={<App />} />
+          <Route path="team-stats" element={<TeamStats />} />
+          <Route path="*" element={<App />} />
+        {/* </Route> */}
+      </Routes>
     
 </BrowserRouter>
 
