@@ -85,7 +85,7 @@ function Game(props) {
           <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
         </Row>
-        <Link to='/add-drop-scheduler' state={{leagueId: props.leagueId, teamId:'6'}}>Test</Link>
+        {/* <Link to='/add-drop-scheduler' state={{leagueId: props.leagueId, teamId:'6'}}>Test</Link> */}
       </Col>
     );
   }
