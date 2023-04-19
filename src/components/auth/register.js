@@ -13,7 +13,7 @@ export default class Register extends Component {
         const { value, name } = event.target;
         this.setState({
             [name]: value,
-            error:undefined
+            error: undefined
         });
     }
 
@@ -32,24 +32,23 @@ export default class Register extends Component {
             }
         })
             .then(res => {
-                if (res.status === 201) {
-                    res.json().then(json => {
+                res.json().then(json => {
+                    if (res.status === 201) {
                         if (json?.token) {
                             this.props.setToken(json)
+                        } else {
+                            console.error("No token after registration.")
                         }
-                    })
-                } else if (res.status === 400) {
-                    res.json().then(json => {
-                        if (json?.error?.startsWith("Record already")) {
+                    } else if (res.status === 400) {
+                        if (json?.message?.startsWith("Record already")) {
                             this.showError("Email already in use. Please log in instead.")
                         }
-                    })
-                    
-                } else {
-                    console.error(res.error)
-                    const error = new Error(res.error);
-                    throw error;
-                }
+                    } else {
+                        console.error(json.message)
+                        const error = new Error(json.message);
+                        throw error;
+                    }})
+
             })
             .catch(err => {
                 console.error(err);
@@ -64,30 +63,30 @@ export default class Register extends Component {
                     <form onSubmit={this.onSubmit}>
                         <h1>Register Below!</h1>
                         <div>
-                        <div className='login-form-label'>
-                        <label>Email:</label>
-                    </div>
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Enter email"
-                            value={this.state.email}
-                            onChange={this.handleInputChange}
-                            required
-                        />
+                            <div className='login-form-label'>
+                                <label>Email:</label>
+                            </div>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Enter email"
+                                value={this.state.email}
+                                onChange={this.handleInputChange}
+                                required
+                            />
                         </div>
                         <div>
-                        <div className='login-form-label'>
-                        <label>Password:</label>
-                    </div>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Enter password"
-                            value={this.state.password}
-                            onChange={this.handleInputChange}
-                            required
-                        />
+                            <div className='login-form-label'>
+                                <label>Password:</label>
+                            </div>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Enter password"
+                                value={this.state.password}
+                                onChange={this.handleInputChange}
+                                required
+                            />
                         </div>
                         <input className='login-form-submit' type="submit" value="Submit" />
                     </form>

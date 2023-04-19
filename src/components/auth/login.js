@@ -17,7 +17,7 @@ export default class Login extends Component {
         const { value, name } = event.target;
         this.setState({
             [name]: value,
-            error:undefined
+            error: undefined
         });
     }
 
@@ -32,25 +32,23 @@ export default class Login extends Component {
             }
         })
             .then(res => {
-                if (res.status === 200) {
-                    res.json().then(json => {
-                        // console.log(json)
+                res.json().then(json => {
+                    if (res.status === 200) {
                         if (json) {
                             this.props.setToken(json)
                         } else {
                             console.log("No token after logging in.")
                         }
-                    })
-                } else if (res.status === 401) {
-                    this.showError("Incorrect password")
-                } else {
-                    const error = new Error(res.error);
-                    throw error;
-                }
+                    } else if (res.status === 401) {
+                        this.showError("Incorrect password")
+                    } else {
+                        this.showError(json.message)
+                    }
+                }).catch(err => {throw err})
             })
             .catch(err => {
                 console.error(err);
-                alert('Error logging in please try again');
+                this.showError(err.message);
             });
     }
 
@@ -64,29 +62,29 @@ export default class Login extends Component {
                     <h1>Login Below!</h1>
                     <div>
                         <div className='login-form-label'>
-                        <label>Email:</label>
+                            <label>Email:</label>
                         </div>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter email"
-                        value={this.state.email}
-                        onChange={this.handleInputChange}
-                        required
-                    />
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter email"
+                            value={this.state.email}
+                            onChange={this.handleInputChange}
+                            required
+                        />
                     </div>
                     <div>
-                    <div className='login-form-label'>
-                        <label>Password:</label>
-                    </div>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Enter password"
-                        value={this.state.password}
-                        onChange={this.handleInputChange}
-                        required
-                    />
+                        <div className='login-form-label'>
+                            <label>Password:</label>
+                        </div>
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter password"
+                            value={this.state.password}
+                            onChange={this.handleInputChange}
+                            required
+                        />
                     </div>
                     <input className='login-form-submit' type="submit" value="Submit" />
                 </form>
