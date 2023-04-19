@@ -13,18 +13,18 @@ import { getUserLeagues, createUserLeague, deleteUserLeague } from '../api/user-
 import { LeagueTypes } from '../enums';
 import AddLeagueButton from './add-league-button';
 import RegisterContainer from './auth/register-container';
-import {getRosteredProbablePitchers} from '../api/user-teams'
+
 
 
 import CollapsibleGamesContainer from './games/collapsible-games-container'
 import ErrorAlert from './errors/error-alert';
+import MyTeamsProjectedStarters from './my-teams-projected-starters';
 
 
 
 function ProjectedStarters() {
 
   const [data, setData] = useState([]);
-  const [rosteredProbablePitchers, setRosteredProbablePitchers] = useState([]);
   const { token, setToken } = useToken();
   const [registerFlag, setRegisterFlag] = useState(false);
   const { email, setEmail } = useEmail();
@@ -90,7 +90,6 @@ function ProjectedStarters() {
 
   const handleApiError = (error) => {
     setData([]);
-    setRosteredProbablePitchers([]);
   }
 
   const handleUnauthorized = (error) => {
@@ -128,7 +127,6 @@ function ProjectedStarters() {
       // console.log(response)
       setUserLeagues(response.data);
       setData([])
-      setRosteredProbablePitchers([]);
     } else {
       handleUnauthorized(response.error);
       // ToDo: handle error
@@ -144,13 +142,7 @@ function ProjectedStarters() {
   const showFreeAgents = async (leagueId) => {
     setLoading(true);
     setActiveLeagueId(leagueId);
-    const rosteredPitcherInfo = await getRosteredProbablePitchers(token, leagueId);
-    if (rosteredPitcherInfo.success) {
-      setRosteredProbablePitchers(rosteredPitcherInfo.data);
-    } else {
-      //ToDo: handle error
-      console.error(rosteredPitcherInfo.error)
-    }
+
     const response = await getData(token, leagueId);
     if (response.success) {
       // console.log(response.data)
@@ -182,7 +174,6 @@ function ProjectedStarters() {
     setActiveLeagueId(null);
     setError({});
     setEmail(null);
-    setRosteredProbablePitchers([])
   }
 
   // console.log(JSON.stringify(data))
@@ -227,15 +218,14 @@ function ProjectedStarters() {
     }
   }
 
-  const renderProjectedStarters = (playerData, title) => {
-    
-    if (userLeagues?.length === 0) {
-      return null;
-    }
-
+  const renderFreeAgentProjectedStarters = (playerData) => {
     return (
-      <CollapsibleGamesContainer playerData={playerData} title={title} leagueId={activeLeagueId}></CollapsibleGamesContainer>
+      <CollapsibleGamesContainer playerData={playerData} title={"Free Agent Scheduled Starters"} leagueId={activeLeagueId}></CollapsibleGamesContainer>
     )
+  }
+
+  const renderMyTeamsScheduledStarters = () => {
+    return <MyTeamsProjectedStarters leagueId={activeLeagueId} userLeagues={userLeagues} setUserLeagues={setUserLeagues}></MyTeamsProjectedStarters> 
   }
 
   const renderConnectLeagueInstructions = () => {
@@ -256,14 +246,13 @@ function ProjectedStarters() {
       return renderErrorMessage(error);
     }
 
-    console.log(`Data Data: ${data}`)
     return (
       <Col>
           {userLeagues?.length > 0 || isLoading ? null : renderConnectLeagueInstructions()}
           {(userLeagues?.length > 0 && data.length === 0 && !isLoading) ? renderShowFreeAgentInstructions() : null}
-          {isLoading ? renderLoadingIndicator() :  renderProjectedStarters(data, "Free Agent Scheduled Starters")}
+          {isLoading ? renderLoadingIndicator() : userLeagues?.length > 0 ?  renderFreeAgentProjectedStarters(data) : null}
           {isLoading ? null : <hr></hr>}
-          {isLoading ? renderLoadingIndicator() : renderProjectedStarters(rosteredProbablePitchers, "My Team's Scheduled Starters")}
+          {isLoading ? renderLoadingIndicator() : userLeagues?.length > 0 && activeLeagueId ? renderMyTeamsScheduledStarters() : null}
         </Col>
     )
   }

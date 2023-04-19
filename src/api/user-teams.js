@@ -10,7 +10,7 @@ export async function createTeam(token, teamId, leagueId, teamNickname) {
         const config = { "x-access-token": token };
         const body = { teamId, leagueId, teamNickname }
         const resp = await axios.post(
-            `${baseUrl}/teams/createTeam`,
+            `${baseUrl}/userTeams/createUserTeam`,
             body,
             { headers: config });
         return createSuccessResponse(resp.data);
@@ -20,12 +20,12 @@ export async function createTeam(token, teamId, leagueId, teamNickname) {
     }
 }
 
-export async function getRosteredProbablePitchers(token, leagueId) {
+export async function getRosteredProbablePitchers(token, leagueId, teamId) {
     try {
         const baseUrl = process.env.REACT_APP_API_URL;
         console.log(`calling getRosteredProbablePitchers...`)
         const config = { "x-access-token": token };
-        const resp = await axios.get(`${baseUrl}/roster/getProjectedStarters/${leagueId}`, { headers: config });
+        const resp = await axios.get(`${baseUrl}/roster/getProjectedStarters/${leagueId}/${teamId}`, { headers: config });
         return createSuccessResponse(resp.data);
     } catch (err) {
         console.error(err);

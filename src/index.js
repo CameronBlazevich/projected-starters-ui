@@ -14,7 +14,9 @@ root.render(
         {/* <Route path="/" element={<Layout />}> */}
           <Route index element={<App />} />
           <Route path="team-stats" element={<TeamStats />} />
-          <Route path="add-drop-scheduler" element={<AddDropScheduler></AddDropScheduler>} />
+          <Route 
+          path="add-drop-scheduler" 
+          element={<AddDropScheduler></AddDropScheduler>} />
           <Route path="*" element={<App />} />
         {/* </Route> */}
       </Routes>
