@@ -276,6 +276,7 @@ button.show-drawer {
   font-family: Georgia, 'Times New Roman', Times, serif;
   height: 100vh;
   align-content: center;
+  align-items: center;
 }
 
 .login-form-label {
