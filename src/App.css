@@ -158,10 +158,14 @@ span.park-factor:hover {
   width: fit-content;
   padding: 5px;
   border-style: solid;
-  border-color: white;
-  border-width: 1px;
+  border-color: black;
+  border-width: 3px;
+  border-radius: 5%;
+  background-color: white;
+  color:black;
   display: inline-block;
   margin-top:10px;
+  box-shadow:  -5px 5px  #282c34;
 }
 
 /* .register-form-container {
@@ -263,26 +267,42 @@ button.show-drawer {
   /* background-image: url(https://s.yimg.com/dh/ap/fantasy/img/background-baseball@2x.jpg?v=1); */
   height: 100vh;
   width: 100vw;
+ 
 
 }
 
 .landing-page-content {
   position: relative;
   font-family: Georgia, 'Times New Roman', Times, serif;
-  
+  height: 100vh;
+  align-content: center;
 }
 
-.white-text-black-outline {
+.login-form-label {
+  text-align: left;
+  color: gray;
+}
+
+.login-form-submit {
+  margin-top: 2px;;
+}
+
+.white-text {
   color:white;
-  text-shadow:
-		-2px -2px 0 #000,
-		2px -2px 0 #000,
-		-2px 2px 0 #000,
-		2px 2px 0 #000;
+}
+
+.app-image-container {
+
 }
 
 .app-sample-img {
-  width: 400px;
+  width: 100%;
+  z-index: 3;
+  position: relative;
+}
+
+.app-phone-img {
+  width:20%
 }
 
 .show-free-agent-instructions {

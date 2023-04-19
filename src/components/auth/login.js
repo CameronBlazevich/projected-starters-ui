@@ -63,6 +63,9 @@ export default class Login extends Component {
                 <form onSubmit={this.onSubmit}>
                     <h1>Login Below!</h1>
                     <div>
+                        <div className='login-form-label'>
+                        <label>Email:</label>
+                        </div>
                     <input
                         type="email"
                         name="email"
@@ -73,6 +76,9 @@ export default class Login extends Component {
                     />
                     </div>
                     <div>
+                    <div className='login-form-label'>
+                        <label>Password:</label>
+                    </div>
                     <input
                         type="password"
                         name="password"
@@ -82,7 +88,7 @@ export default class Login extends Component {
                         required
                     />
                     </div>
-                    <input type="submit" value="Submit" />
+                    <input className='login-form-submit' type="submit" value="Submit" />
                 </form>
                 <p>No Account? <a href="#" onClick={() => this.props.setRegisterFlag(true)}>Register Here</a></p>
                 <p className="error">{this.state.error}</p>
