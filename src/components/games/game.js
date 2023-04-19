@@ -2,6 +2,7 @@ import {Row, Col} from 'reactstrap'
 import { getLogoId } from '../../mlb-team-logos/logo-mapper'
 import { getParkFactor } from '../../data/park-factors'
 import ParkFactorPopover from './park-factor-popover'
+import { Link } from 'react-router-dom'
 
 
 function Game(props) {
@@ -84,6 +85,7 @@ function Game(props) {
           <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
         </Row>
+        <Link to='/add-drop-scheduler' state={{leagueId: props.leagueId, teamId:'6'}}>Test</Link>
       </Col>
     );
   }

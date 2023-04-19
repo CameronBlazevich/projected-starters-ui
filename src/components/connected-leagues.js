@@ -39,7 +39,7 @@ const ConnectedLeagues = (props) => {
                 {tableRows}
             </tbody>
         </Table>
-        <AddLeagueButton floatRight onClick={toggleModal}></AddLeagueButton>
+        <AddLeagueButton onClick={toggleModal}></AddLeagueButton>
     </div>
     )
 }

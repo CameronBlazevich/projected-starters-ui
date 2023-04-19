@@ -1,11 +1,11 @@
 import GameRow from './game-row';
 
 const Games = (props) => {
-    const {playerData} = props;
+    const {playerData, leagueId} = props;
 
     const gameRows = playerData.map((gameDay, index) => {
         return (
-          <GameRow key={index} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
+          <GameRow key={index} leagueId={leagueId} gameDate={gameDay.gameDate} games={gameDay.games}></GameRow>
         );
       });
 

@@ -91,8 +91,6 @@ function ProjectedStarters() {
   const handleApiError = (error) => {
     setData([]);
     setRosteredProbablePitchers([]);
-
-
   }
 
   const handleUnauthorized = (error) => {
@@ -155,6 +153,7 @@ function ProjectedStarters() {
     }
     const response = await getData(token, leagueId);
     if (response.success) {
+      // console.log(response.data)
     setData(response.data)
     } else {
       console.log(response.error)

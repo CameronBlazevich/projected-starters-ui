@@ -20,8 +20,6 @@ const TeamStats = (props) => {
         getStats();
     }, [])
 
-    console.log(JSON.stringify(teamStats))
-
     const tableRows = teamStats.map(team => {
         return (
             <tr>

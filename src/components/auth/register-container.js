@@ -5,7 +5,7 @@ const RegisterContainer = (props) => {
     const { setToken, registerFlag, setRegisterFlag} = props;
     
     return (
-        <div className='landing-page'>
+        <div className='landing-page' style={{backgroundImage: `url(${process.env.PUBLIC_URL}/app-sample.png)`}}>
             <Row className="white-text-black-outline text-align-center">
                 <Col sm="2"></Col>
                 <Col sm="8"><h1>Big Title Banner With App Name</h1></Col>

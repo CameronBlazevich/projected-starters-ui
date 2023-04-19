@@ -3,7 +3,7 @@ import Game from './game';
 
 function GameRow(props) {
     const games = props.games.map((game, index) => {
-      return <Game key={index} gameInfo={game}></Game>;
+      return <Game key={index} gameInfo={game} leagueId={props.leagueId}></Game>;
     });
 
     return (

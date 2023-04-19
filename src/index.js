@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import TeamStats from './components/containers/team-stats'
 import reportWebVitals from './reportWebVitals';
+import AddDropScheduler from './components/add-drop-scheduler/schedule-add-drops';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
         {/* <Route path="/" element={<Layout />}> */}
           <Route index element={<App />} />
           <Route path="team-stats" element={<TeamStats />} />
+          <Route path="add-drop-scheduler" element={<AddDropScheduler></AddDropScheduler>} />
           <Route path="*" element={<App />} />
         {/* </Route> */}
       </Routes>
