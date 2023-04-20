@@ -23,8 +23,8 @@ const ConnectedLeagues = (props) => {
             <tr key={index}>
                 <td><Button onClick={() => handleClick(league.league_id)} color="success" size="sm">Show</Button></td>
                 <td>{league.league_id}</td>
-                {/* <td>{leagueIdMap[league.league_type_id]}</td> */}
-                <td>{league.team_id} {icon}</td>
+                <td>{leagueIdMap[league.league_type_id]}</td>
+                {/* <td>{league.team_id} {icon}</td> */}
                 <td><FontAwesomeIcon icon={faTrash} size="1x" onClick={() => deleteLeague(league.league_id)}>Remove</FontAwesomeIcon></td>
             </tr>
         )
@@ -37,7 +37,7 @@ const ConnectedLeagues = (props) => {
                 <tr>
                     <th></th>
                     <th>Id</th>
-                    <th>TeamId</th>
+                    <th>Type</th>
                     <th></th>
                 </tr>
             </thead>
