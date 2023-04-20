@@ -16,7 +16,7 @@ export async function createTeam(token, teamId, leagueId, teamNickname) {
         return createSuccessResponse(resp.data);
     } catch (err) {
         console.error(err);
-        return createErrorResponse(err);
+        return createErrorResponse(err.response);
     }
 }
 
@@ -29,6 +29,6 @@ export async function getRosteredProbablePitchers(token, leagueId, teamId) {
         return createSuccessResponse(resp.data);
     } catch (err) {
         console.error(err);
-        return createErrorResponse(err);
+        return createErrorResponse(err.response);
     }
 }

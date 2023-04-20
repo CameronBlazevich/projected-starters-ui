@@ -4,11 +4,13 @@ import CreateTeamModal from "./teams/create-team-modal"
 import {getRosteredProbablePitchers, createTeam} from '../api/user-teams'
 import { useState, useEffect } from "react";
 import useToken from "./auth/useToken";
+import ErrorAlert from "./errors/error-alert";
 
 
 const MyTeamsProjectedStarters = (props) => {
     const [myTeamsStarters, setMyTeamsStarters] = useState();
     const [isModalOpen, setIsModalOpen] = useState();
+    const [error, setError] = useState();
     const {token, setToken} = useToken();
     const toggleModal = () => setIsModalOpen(!isModalOpen)
 
@@ -16,6 +18,7 @@ const MyTeamsProjectedStarters = (props) => {
     const leagueInfo = props.userLeagues.find(ul => ul.league_id === props.leagueId);
     
     useEffect(() =>{
+        console.log(`Error ${error}`)
         if (token) {
             if (leagueInfo?.team_id) {
                 const getMyTeamsStarters = async (authToken, league) => {
@@ -23,8 +26,8 @@ const MyTeamsProjectedStarters = (props) => {
                     if (resp.success) {
                         setMyTeamsStarters(resp.data)
                     } else {
-                        //ToDo: handle error
-                        console.error(resp.error)
+                        // setError(resp.error?.data?.error);
+                        console.error(resp)
                     }
                 }
                 
@@ -54,6 +57,23 @@ const MyTeamsProjectedStarters = (props) => {
         toggleModal()
     }
 
+    if (error) {
+        if (error === "invalid-team-key") {
+            const line1 = "Yahoo rejected your team key."
+            const line2 = "Remove the team id from this league and add a new one taking care to follow the instructions."
+        
+        return (
+            <div> 
+                <h2>{`My Team's Scheduled Starters (League ${props.leagueId})`}</h2>
+                <p className='error'>{line1}</p>
+                <p className='error'>{line2}</p>
+                
+            </div>
+        )
+        } else {
+            return <div>Something went wrong.</div>
+        }
+    }
     
 
     if (!props.leagueId) {

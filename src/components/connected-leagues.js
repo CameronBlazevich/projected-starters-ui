@@ -1,7 +1,7 @@
 import { Table, Button } from "reactstrap";
 import AddLeagueButton from "./add-league-button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const ConnectedLeagues = (props) => {
     const {userLeagues, toggleModal, showFreeAgents, deleteLeague, closeDrawer} = props; 
@@ -14,11 +14,17 @@ const ConnectedLeagues = (props) => {
     }
 
     const tableRows = userLeagues.map((league, index) => {
+        const icon = league.team_id ? 
+        <FontAwesomeIcon className="error" icon={faTimes} size="1x" onClick={() => deleteLeague(league.league_id)}></FontAwesomeIcon> :
+        <FontAwesomeIcon className="primary" icon={faPlus} size="1x" onClick={() => deleteLeague(league.league_id)}></FontAwesomeIcon>
+
+
         return (
             <tr key={index}>
                 <td><Button onClick={() => handleClick(league.league_id)} color="success" size="sm">Show</Button></td>
                 <td>{league.league_id}</td>
-                <td>{leagueIdMap[league.league_type_id]}</td>
+                {/* <td>{leagueIdMap[league.league_type_id]}</td> */}
+                <td>{league.team_id} {icon}</td>
                 <td><FontAwesomeIcon icon={faTrash} size="1x" onClick={() => deleteLeague(league.league_id)}>Remove</FontAwesomeIcon></td>
             </tr>
         )
@@ -31,7 +37,7 @@ const ConnectedLeagues = (props) => {
                 <tr>
                     <th></th>
                     <th>Id</th>
-                    <th>Type</th>
+                    <th>TeamId</th>
                     <th></th>
                 </tr>
             </thead>

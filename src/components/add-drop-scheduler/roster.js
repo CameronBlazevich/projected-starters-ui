@@ -37,11 +37,17 @@ const Roster = (props) => {
         <div>
             <Table>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Positions</th>
+                    <th>GP</th>
+                    <th>PA</th>
+                    <th>GS</th>
+                    <th>IP</th>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>S</th>
+                    <th>K</th>
                 </tr>
             </Table>
         </div>

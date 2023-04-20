@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Collapse, Button } from "reactstrap";
+import { Collapse } from "reactstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import Games from "./games";
