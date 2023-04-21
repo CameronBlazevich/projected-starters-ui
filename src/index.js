@@ -6,6 +6,7 @@ import App from './App';
 import TeamStats from './components/containers/team-stats'
 import reportWebVitals from './reportWebVitals';
 import AddDropScheduler from './components/add-drop-scheduler/schedule-add-drops';
+import GameWeatherContainer from './components/game-weather/game-weather-container'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,6 +18,7 @@ root.render(
           <Route 
           path="add-drop-scheduler" 
           element={<AddDropScheduler></AddDropScheduler>} />
+          <Route path="game-weather" element={<GameWeatherContainer></GameWeatherContainer>} />
           <Route path="*" element={<App />} />
         {/* </Route> */}
       </Routes>

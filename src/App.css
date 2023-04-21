@@ -225,6 +225,13 @@ span.bold {
 .hitting-team-logo {
   height: 25px;
 }
+
+.weather-team-logo {
+  height: 50px;
+  margin-left:5px;
+  margin-right:5px;
+}
+
 .logo-row {
   /* padding-top:5px; */
 }
@@ -323,3 +330,19 @@ button.show-drawer {
 
 }
 
+.table-constant {
+  background-color: rgb(240, 240, 240);
+}
+
+.weather-condition-icon {
+  width: 50px;
+}
+
+.game-time-hours {
+  background-color: lightcyan;
+}
+
+.weather-game-header {
+  background-color:  rgb(240, 240, 240);
+  padding: 5px;
+}
