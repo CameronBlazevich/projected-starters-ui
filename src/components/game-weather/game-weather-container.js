@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { getGameWeather } from "../../api/game-weather";
 import WeatherGameDay from "./weather-game-day";
 import { Col, Row } from "reactstrap";
+import { useAuthContext } from "../../context/auth-context";
+import { handleUnauthorized } from "../errors/handle-unauthorized";
 
 
 
 const GameWeatherContainer = (props) => {
     const [gameWeather, setGameWeather] = useState();
     const [dateToShow, setDateToShow] = useState();
+    const {logout} = useAuthContext();
 
     useEffect(() => {
         const getWeatherForGames = async () => {
@@ -16,6 +19,7 @@ const GameWeatherContainer = (props) => {
                 setGameWeather(weather.data)
                 setDateToShow(weather.data[1].date)
             } else {
+                handleUnauthorized(weather.error, logout)
                 console.log(weather.error)
             }
         }

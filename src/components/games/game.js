@@ -10,7 +10,6 @@ function Game(props) {
     const renderPlayerImage = (playerUrl) => {
         return <img src={playerUrl}></img>
       }
-
       const parkData = getParkFactor(props.gameInfo.homeTeam.teamAbbr);
 
     return (
@@ -64,7 +63,7 @@ function Game(props) {
         </Row>
         
         <Row className="team-info">
-          <Col className="park-factor">{parkData.Venue} <span id={`${parkData.TeamAbbr}`} className='bold park-factor'>PF: {parkData.ParkFactor}</span></Col>
+          <Col className="park-factor">{parkData?.Venue} <span id={`${parkData.TeamAbbr}`} className='bold park-factor'>PF: {parkData.ParkFactor}</span></Col>
         </Row>
         <ParkFactorPopover popoverId={`${parkData.TeamAbbr}`} parkFactor={parkData.ParkFactor}></ParkFactorPopover>
   
@@ -85,9 +84,31 @@ function Game(props) {
           <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
         </Row>
+        <Row className="pitcher-stats">
+          <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.awayPitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerIds)}</Col>
+          <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.homePitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerIds)}</Col>
+        </Row>
         {/* <Link to='/add-drop-scheduler' state={{leagueId: props.leagueId, teamId:'6'}}>Test</Link> */}
       </Col>
     );
+  }
+
+  const renderAddWatch = (gameId, pitcherId, leagueId, addToWatch, removeFromWatch, watchedPlayerIds) => {
+    // if game / pitcher is already watched, render "Unwatch"
+    if (!addToWatch) {
+      return null;
+    }
+
+    if (!pitcherId) {
+      return null;
+    }
+
+    const isWatched = watchedPlayerIds.includes(pitcherId);
+    const text = isWatched ? "Remove Watch" : "Add To Watch"
+    const link = isWatched ?  
+      <span className="clickable" onClick={() => removeFromWatch(gameId, pitcherId, leagueId)}>{text}</span> :
+      <span className="clickable" onClick={() => addToWatch(gameId, pitcherId, leagueId)}>{text}</span>
+    return link;
   }
 
   function TeamStat(props) {

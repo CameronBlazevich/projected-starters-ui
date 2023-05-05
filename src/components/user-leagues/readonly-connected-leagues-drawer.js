@@ -1,10 +1,9 @@
 import { Row, Col } from "reactstrap";
-import ConnectedLeagues from "./connected-leagues";
-import AddLeagueButton from "./add-league-button";
+import ReadOnlyConnectedLeagues from "./readonly-connected-leagues";
 
 
 const ConnectedLeaguesDrawer = (props) => {
-    const { show, setShow, showFreeAgents, openCreateLeague, userLeagues, deleteLeague } = props;
+    const { show, setShow, showFreeAgents, userLeagues } = props;
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -15,7 +14,7 @@ const ConnectedLeaguesDrawer = (props) => {
             <Row>
                 <Col>
                     <div className="text-align-center connected-leagues-header"><h4>Connected Leagues</h4></div>
-                    <ConnectedLeagues closeDrawer={handleClose} deleteLeague={deleteLeague} showFreeAgents={showFreeAgents} toggleModal={openCreateLeague} userLeagues={userLeagues}></ConnectedLeagues>
+                    <ReadOnlyConnectedLeagues closeDrawer={handleClose} showFreeAgents={showFreeAgents} userLeagues={userLeagues}></ReadOnlyConnectedLeagues>
                 </Col>
             </Row>
         );

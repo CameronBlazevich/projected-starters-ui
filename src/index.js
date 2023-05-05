@@ -7,24 +7,30 @@ import TeamStats from './components/containers/team-stats'
 import reportWebVitals from './reportWebVitals';
 import AddDropScheduler from './components/add-drop-scheduler/schedule-add-drops';
 import GameWeatherContainer from './components/game-weather/game-weather-container'
-
+import WatchlistContainer from './components/watchlist/watchlist-container';
+import Layout from './components/layout';
+import { AuthProvider } from './context/auth-context';
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-<BrowserRouter>
-<Routes>
-        {/* <Route path="/" element={<Layout />}> */}
-          <Route index element={<App />} />
-          <Route path="team-stats" element={<TeamStats />} />
-          <Route 
-          path="add-drop-scheduler" 
-          element={<AddDropScheduler></AddDropScheduler>} />
-          <Route path="game-weather" element={<GameWeatherContainer></GameWeatherContainer>} />
-          <Route path="*" element={<App />} />
-        {/* </Route> */}
-      </Routes>
-    
-</BrowserRouter>
 
+root.render(
+  <AuthProvider>
+  <BrowserRouter>
+ 
+    <Routes>
+      <Route path="/" element={<Layout />}>
+      <Route index element={<App />} />
+      <Route path="team-stats" element={<TeamStats />} />
+      <Route
+        path="add-drop-scheduler"
+        element={<AddDropScheduler></AddDropScheduler>} />
+      <Route path="game-weather" element={<GameWeatherContainer></GameWeatherContainer>} />
+      <Route path="watchlist" element={<WatchlistContainer></WatchlistContainer>} />
+      <Route p ath="*" element={<App />} />
+      </Route>
+    </Routes>
+    
+  </BrowserRouter>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

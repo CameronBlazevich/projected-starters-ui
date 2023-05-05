@@ -1,8 +1,12 @@
 import {Row, Col} from 'reactstrap'
 import Login from './login';
+import { useState } from 'react';
+
 
 const RegisterContainer = (props) => {
-    const { setToken, registerFlag, setRegisterFlag} = props;
+    const [isRegistration, setIsRegistration] = useState(false);
+
+    const { setToken } = props;
     
     return (
         <div 
@@ -29,7 +33,7 @@ const RegisterContainer = (props) => {
                     <li>Manage multiple leagues at once</li>
                 </ul>
                 <div className='text-align-center'>
-                <Login setToken={setToken} registerFlag={registerFlag} setRegisterFlag={setRegisterFlag}></Login>
+                <Login setToken={setToken} registerFlag={isRegistration} setRegisterFlag={setIsRegistration}></Login>
                 </div>
                 </Col>
                 <Col className="app-image-container" sm="5">

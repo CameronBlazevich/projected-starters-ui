@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import AppHeader from "../app-header";
 import { getTeamStats } from "../../api/team-stats";
 import {Table} from 'reactstrap'
+import { useAuthContext } from "../../context/auth-context";
+import { handleUnauthorized } from "../errors/handle-unauthorized";
+
 
 
 const TeamStats = (props) => {
     const [teamStats, setTeamStats] = useState()
+    const { logout } = useAuthContext();
 
     useEffect(() => {
         const getStats = async () => {
@@ -13,6 +17,7 @@ const TeamStats = (props) => {
             if (resp.success) {
                 setTeamStats(resp.data);
             } else {
+                handleUnauthorized(resp.error, logout)
                 console.error(resp.error);
                 //ToDo: handle error
             }

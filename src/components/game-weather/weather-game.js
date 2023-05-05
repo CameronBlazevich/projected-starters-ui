@@ -6,23 +6,27 @@ import { getParkFactor } from "../../data/park-factors";
 
 const WeatherGame = (props) => {
 
-    const tableHeaders = props.game.weather.map(hour => {
-        return <th className="table-constant">{convertTo12Hour(hour.time_local.slice(11, 16))}</th>
+
+    
+
+    const tableHeaders = props.game.weather.map((hour, index) => {
+        return <th key={index} className="table-constant">{convertTo12Hour(hour.time_local.slice(11, 16))}</th>
     })
 
     const firstCellMapper = { 0: "Conditions", 1: "Temp", 2: "Feels Like", 3: "Precip %", 4: "Wind Speed", 5: "Wind Dir" }
-    const timeZoneDisplayMap = {'America/New_York': 'ET', 'America/Chicago': 'CT', "America/Phoenix": 'MT', "America/Los_Angeles": "PT"};
+    const timeZoneDisplayMap = {'America/New_York': 'ET', 'America/Detroit': 'ET', 'America/Chicago': 'CT', "America/Phoenix": 'MT', "America/Los_Angeles": "PT"};
 
-    const parkFactor = getParkFactor(props.game.homeTeam);
+    const parkFactor = getParkFactor(props.game.homeTeam.teamAbbr);
 
     const hours = props.game.weather;
+    
     return (
         <div>
             <div className="weather-game-header">
                 <div>
-                <img className="weather-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.game.awayTeam)}.svg`}></img>
-                {` @ `}
-                <img className="weather-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.game.homeTeam)}.svg`}></img>
+                {/* <img className="weather-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.game.awayTeam.teamAbbr)}.svg`}></img>
+                {` @ `} */}
+                <img className="weather-team-logo" src={`https://www.mlbstatic.com/team-logos/${getLogoId(props.game.homeTeam.teamAbbr)}.svg`}></img>
                 </div>
                 <div>{parkFactor?.Venue}</div>
                 {props.game.date} {convertTimezone(props.game.gameTime.time, props.game.gameTime.tz, props.game.stadium_timezone )} 
@@ -30,10 +34,13 @@ const WeatherGame = (props) => {
                 {` (${timeZoneDisplayMap[props.game.stadium_timezone]})`} 
             </div>
             <Table className="text-align-center" size="sm" bordered>
+                <thead>
                 <tr className="table-constant">
                     <th></th>
                     {tableHeaders}
                 </tr>
+                </thead>
+                <tbody>
                 <tr>
                     <td className="table-constant">{firstCellMapper[0]}</td>
                     <td><img className="weather-condition-icon" src={hours[0].condition.icon}></img> {hours[0].condition.description}</td>
@@ -94,6 +101,7 @@ const WeatherGame = (props) => {
                     <td>{hours[5].wind.direction}</td>
                     <td>{hours[6].wind.direction}</td>
                 </tr>
+                </tbody>
             </Table>
         </div>
     )

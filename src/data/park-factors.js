@@ -35,3 +35,7 @@ const parkData =
 export const getParkFactor = (teamAbbr) => {
     return parkData.find(pd => pd.TeamAbbr === teamAbbr);
 }
+
+export const getTeamName = (teamAbbr) => {
+    return parkData.find(pd => pd.TeamAbbr === teamAbbr)?.Team;
+}

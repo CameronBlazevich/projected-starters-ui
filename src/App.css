@@ -47,9 +47,18 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a.player-name-link:hover {
   color: blue;
   text-decoration: underline;
+}
+
+a:hover {
+  color: inherit;
+}
+
+span.clickable:hover {
+  cursor: pointer;
+  color:blue;
 }
 
 span.park-factor:hover {
@@ -115,10 +124,15 @@ span.park-factor:hover {
   margin-left: 5px;
 }
 
-.yahoo-auth {
+.col.yahoo-auth {
   max-width: fit-content;
   min-width: fit-content;
   display:flex;
+}
+
+.row.yahoo-auth {
+  justify-content: end;
+  margin:3px;
 }
 
 .game-row {
@@ -141,8 +155,7 @@ span.park-factor:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-top: -50px;
-  margin-left: -50px;
+  transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
 }
@@ -222,6 +235,10 @@ span.bold {
   font-weight: 550;
 }
 
+tr.bold {
+  font-weight: 550;
+}
+
 .hitting-team-logo {
   height: 25px;
 }
@@ -250,6 +267,10 @@ button.show-drawer {
 
 .text-align-center {
   text-align: center;
+}
+
+.border-none {
+  border: none;
 }
 
 .yahoo-authentication-failure {
@@ -339,10 +360,37 @@ button.show-drawer {
 }
 
 .game-time-hours {
-  background-color: lightcyan;
+  background-color: lightcyan !important; 
 }
 
 .weather-game-header {
-  background-color:  rgb(240, 240, 240);
+  background-color:  rgb(240, 240, 240) !important;
   padding: 5px;
+}
+
+.statcast {
+  background-color: aliceblue !important;
+}
+
+.faded-icon {
+  opacity: 40%;
+}
+
+.solid-border {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.pitcher-hitter-matchup-container {
+  min-height: 200px;
+  position: relative;
+}
+
+.watchlist-pitcher-info {
+  margin-top: 20px;
+}
+
+.margin-5 {
+  margin: 5px;
 }

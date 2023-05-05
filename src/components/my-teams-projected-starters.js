@@ -3,15 +3,16 @@ import CollapsibleGamesContainer from "./games/collapsible-games-container";
 import CreateTeamModal from "./teams/create-team-modal"
 import {getRosteredProbablePitchers, createTeam} from '../api/user-teams'
 import { useState, useEffect } from "react";
-import useToken from "./auth/useToken";
 import ErrorAlert from "./errors/error-alert";
-
+import { handleUnauthorized } from "./errors/handle-unauthorized";
+import { useAuthContext } from "../context/auth-context";
 
 const MyTeamsProjectedStarters = (props) => {
     const [myTeamsStarters, setMyTeamsStarters] = useState();
     const [isModalOpen, setIsModalOpen] = useState();
     const [error, setError] = useState();
-    const {token, setToken} = useToken();
+
+    const { user, logout } = useAuthContext()
     const toggleModal = () => setIsModalOpen(!isModalOpen)
 
 
@@ -19,7 +20,7 @@ const MyTeamsProjectedStarters = (props) => {
     
     useEffect(() =>{
         console.log(`Error ${error}`)
-        if (token) {
+        if (user) {
             if (leagueInfo?.team_id) {
                 const getMyTeamsStarters = async (authToken, league) => {
                     const resp = await getRosteredProbablePitchers(authToken, league.league_id, league.team_id)
@@ -27,11 +28,12 @@ const MyTeamsProjectedStarters = (props) => {
                         setMyTeamsStarters(resp.data)
                     } else {
                         // setError(resp.error?.data?.error);
+                        handleUnauthorized(resp.error, logout)
                         console.error(resp)
                     }
                 }
                 
-                getMyTeamsStarters(token, leagueInfo);
+                getMyTeamsStarters(user.token, leagueInfo);
             } else {
                 return;
             }
@@ -44,9 +46,11 @@ const MyTeamsProjectedStarters = (props) => {
     const submitTeamId = async (leagueId, teamId) => {
         setIsModalOpen(false);
 
-        const createTeamResp = await createTeam(token, teamId, leagueId);
+        const createTeamResp = await createTeam(user.token, teamId, leagueId);
         if (createTeamResp.success) {
             props.setUserLeagues(createTeamResp.data)
+        } else {
+            handleUnauthorized(createTeamResp.error, logout)
         }
 
         console.log(`Creating team w/ id ${teamId} for league ${leagueId}`)

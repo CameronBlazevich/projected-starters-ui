@@ -1,5 +1,5 @@
 import { Table, Button } from "reactstrap";
-import AddLeagueButton from "./add-league-button";
+import AddLeagueButton from "../add-league-button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 

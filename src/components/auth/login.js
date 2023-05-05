@@ -1,32 +1,36 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Register from './register';
+import { useAuthContext } from '../../context/auth-context';
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            email: '',
-            password: ''
-        };
-    }
-    showError = (error) => {
-        this.setState({ error: error })
+const Login = (props) =>  {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState();
+
+    const { login } = useAuthContext();
+    
+    const showError = (error) => {
+        setError(error);
     }
 
-    handleInputChange = (event) => {
+    const handleInputChange = (event) => {
         const { value, name } = event.target;
-        this.setState({
-            [name]: value,
-            error: undefined
-        });
+        if (name === 'email') {
+            setEmail(value)
+        };
+
+        if (name === 'password') {
+            setPassword(value);
+        }
+       
     }
 
-    onSubmit = (event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
         const baseUrl = process.env.REACT_APP_API_URL;
         fetch(`${baseUrl}/login`, {
             method: 'POST',
-            body: JSON.stringify(this.state),
+            body: JSON.stringify({email, password}),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -35,30 +39,30 @@ export default class Login extends Component {
                 res.json().then(json => {
                     if (res.status === 200) {
                         if (json) {
-                            this.props.setToken(json)
+                            login(json)
                         } else {
                             console.log("No token after logging in.")
                         }
                     } else if (res.status === 401) {
-                        this.showError("Incorrect password")
+                        showError("Incorrect password")
                     } else {
-                        this.showError(json.message)
+                        showError(json.message)
                     }
                 }).catch(err => {throw err})
             })
             .catch(err => {
                 console.error(err);
-                this.showError(err.message);
+                showError(err.message);
             });
     }
 
-    render() {
-        if (this.props.registerFlag) {
-            return (<Register setToken={this.props.setToken} setRegisterFlag={this.props.setRegisterFlag}></Register>)
+
+        if (props.registerFlag) {
+            return (<Register setRegisterFlag={props.setRegisterFlag}></Register>)
         }
         return (
             <div className="login-form">
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={onSubmit}>
                     <h1>Login Below!</h1>
                     <div>
                         <div className='login-form-label'>
@@ -68,8 +72,8 @@ export default class Login extends Component {
                             type="email"
                             name="email"
                             placeholder="Enter email"
-                            value={this.state.email}
-                            onChange={this.handleInputChange}
+                            value={email}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
@@ -81,16 +85,19 @@ export default class Login extends Component {
                             type="password"
                             name="password"
                             placeholder="Enter password"
-                            value={this.state.password}
-                            onChange={this.handleInputChange}
+                            value={password}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
                     <input className='login-form-submit' type="submit" value="Submit" />
                 </form>
-                <p>No Account? <a href="#" onClick={() => this.props.setRegisterFlag(true)}>Register Here</a></p>
-                <p className="error">{this.state.error}</p>
+                <p>No Account? <a href="#" onClick={() => props.setRegisterFlag(true)}>Register Here</a></p>
+                <p className="error">{error}</p>
             </div>
-        );
-    }
+        )
+    
 }
+
+
+export default Login;

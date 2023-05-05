@@ -1,26 +1,58 @@
-import {Col, Row, Button} from 'reactstrap'
-import Logout from './auth/logout'
+import { Link } from 'react-router-dom'
+import { Col, Row, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink,Collapse, NavbarText, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
+import { useAuthContext } from '../context/auth-context'
+
 
 const AppHeader = (props) => {
-    const handleClick = () => {
-        const client_id = process.env.REACT_APP_YAHOO_CLIENT_ID;
-        
-        const redirect_uri = encodeURI(process.env.REACT_APP_YAHOO_REDIRECT_URI)
-        const url = `https://api.login.yahoo.com/oauth2/request_auth?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&language=en-us`;
-        // eslint-disable-next-line
-        location.href = url;
-    }
-    
-    return (
-    <Row className="App-header">
-        <Col className="logged-in-email">{props.email}
-            <Logout logout={props.logout}></Logout>
-        </Col>
 
-        <Col className="yahoo-auth"><span className="d-none d-sm-block">Click to Authorize</span>
-            <Button className="margin-left-5" size="sm" onClick={() => handleClick()}>Yahoo</Button>
-        </Col>
-    </Row>
+    const [isOpen, setIsOpen] = useState(false);
+
+    const { user, logout } = useAuthContext();
+
+    const toggleNavbar = () => {
+        setIsOpen(!isOpen)
+    }
+
+    if (!user) {
+        return null;
+    }
+   
+    return (
+
+        <Row className="App-header">
+            <Col>
+                <Navbar dark expand="md">
+                    <NavbarBrand>
+                        <Link to="/">Projected Starters</Link>
+                    </NavbarBrand>
+                    <NavbarToggler onClick={() => toggleNavbar()}></NavbarToggler>
+                    <Collapse navbar isOpen={isOpen}>
+                        <Nav className="me-auto" navbar>
+                            <NavItem>
+                                <Link className="nav-link" to="/watchlist">Watchlist (beta)</Link>
+                            </NavItem>
+                        </Nav>
+                        <NavbarText>
+                            <UncontrolledDropdown inNavbar>
+                                <DropdownToggle nav caret>
+                                    <FontAwesomeIcon icon={faUser} size="1x"></FontAwesomeIcon>
+                                    {' '}{user.email}
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem onClick={logout}>
+                                        Logout
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </UncontrolledDropdown>
+                        </NavbarText>
+                    </Collapse>
+                </Navbar>
+            </Col>
+        </Row>
+
     )
 }
 
