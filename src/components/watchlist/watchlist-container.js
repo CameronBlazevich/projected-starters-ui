@@ -62,7 +62,6 @@ const WatchlistContainer = (props) => {
     }
 
     const removeFromWatchlist = async (args) => {
-        //ToDo: THIS CLEARLY DOESN'T WORK LETS GET A BETTER APPROACH EH
         const removeResponse = await removeFromWatchlistEntry(user.token, args);
         if (removeResponse.success) {
             setVisiblePitcher(null)
