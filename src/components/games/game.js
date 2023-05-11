@@ -85,15 +85,15 @@ function Game(props) {
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
         </Row>
         <Row className="pitcher-stats">
-          <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.awayPitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerIds)}</Col>
-          <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.homePitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerIds)}</Col>
+          <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.awayPitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerKeys)}</Col>
+          <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.homePitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerKeys)}</Col>
         </Row>
         {/* <Link to='/add-drop-scheduler' state={{leagueId: props.leagueId, teamId:'6'}}>Test</Link> */}
       </Col>
     );
   }
 
-  const renderAddWatch = (gameId, pitcherId, leagueId, addToWatch, removeFromWatch, watchedPlayerIds) => {
+  const renderAddWatch = (gameId, pitcherId, leagueId, addToWatch, removeFromWatch, watchedPlayerKeys) => {
     // if game / pitcher is already watched, render "Unwatch"
     if (!addToWatch) {
       return null;
@@ -103,7 +103,7 @@ function Game(props) {
       return null;
     }
 
-    const isWatched = watchedPlayerIds.includes(pitcherId);
+    const isWatched = watchedPlayerKeys.some(x => x.playerId === pitcherId && x.gameId === gameId);
     const text = isWatched ? "Remove Watch" : "Add To Watch"
     const link = isWatched ?  
       <span className="clickable" onClick={() => removeFromWatch(gameId, pitcherId, leagueId)}>{text}</span> :

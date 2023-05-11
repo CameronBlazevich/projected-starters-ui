@@ -28,7 +28,7 @@ const PitcherSplits = (props) => {
     if (!(splits?.length > 0)) {
         return <div>Splits</div>
     }
-    const splitsToShowOnLoad = ["vs L", "vs R", "Home", "Away", "Mar/Apr", "Jun", "Jul", "Aug", "Sept/Oct"];
+    const splitsToShowOnLoad = ["vs L", "vs R", "Home", "Away", "Mar/Apr", "May", "Jun", "Jul", "Aug", "Sept/Oct"];
     const splitsToShow = splits.filter(s => splitsToShowOnLoad.includes(s.Split));
 
     const splitRows = splitsToShow.map((split, index) => {

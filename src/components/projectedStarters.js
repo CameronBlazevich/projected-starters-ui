@@ -35,7 +35,7 @@ function ProjectedStarters() {
   const [showDrawer, setShowDrawer] = useState(false);
   const [leagueId, setLeagueId] = useState();
   const [error, setError] = useState({});
-  const [watchedPlayerIds, setWatchedPlayerIds] = useState([]);
+  const [watchedPlayerKeys, setWatchedPlayerKeys] = useState([]);
   const toggleModal = () => setModal(!modal);
 
   const {user, logout} = useAuthContext();
@@ -131,9 +131,9 @@ function ProjectedStarters() {
     setLoading(true);
     setActiveLeagueId(leagueId);
 
-    const watchedPlayerIdsResp = await getWatchedPlayerIds(user.token, leagueId);
-    if (watchedPlayerIdsResp.success) {
-      setWatchedPlayerIds(watchedPlayerIdsResp.data);
+    const watchedPlayerKeysResp = await getWatchedPlayerIds(user.token, leagueId);
+    if (watchedPlayerKeysResp.success) {
+      setWatchedPlayerKeys(watchedPlayerKeysResp.data);
     }
 
     const response = await getFreeAgents(user.token, leagueId);
@@ -162,8 +162,7 @@ function ProjectedStarters() {
     const request = { gameId, playerId, leagueId }
     const resp = await addToWatchlistEntry(user.token, request)
     if (resp.success) {
-      setWatchedPlayerIds([...watchedPlayerIds, playerId])
-      console.log(`Successsss`)
+      setWatchedPlayerKeys([...watchedPlayerKeys, {playerId, gameId}])
     } else {
       handleUnauthorized(resp.error, logout)
       console.error(resp.error)
@@ -176,9 +175,11 @@ function ProjectedStarters() {
     const request = { playerId, leagueId }
     const resp = await removeFromWatchlistEntry(user.token, request)
     if (resp.success) {
-      const watchlistIds = resp.data.map(wl => wl.player_id);
-      setWatchedPlayerIds(watchlistIds);
-      console.log(`Successsss`)
+      const watchedKeys = resp.data.map(wl =>  {
+        const entry = {playerId: wl.player_id, gameId: wl.game_id};
+        return entry;
+      });
+      setWatchedPlayerKeys(watchedKeys);
     } else {
       handleUnauthorized(resp.error, logout)
       console.error(resp.error)
@@ -228,7 +229,7 @@ function ProjectedStarters() {
 
   const renderFreeAgentProjectedStarters = (playerData) => {
     return (
-      <CollapsibleGamesContainer playerData={playerData} watchedPlayerIds={watchedPlayerIds} title={"Free Agent Scheduled Starters"} leagueId={activeLeagueId} addToWatchList={addToWatchList} removeFromWatch={removeFromWatch}></CollapsibleGamesContainer>
+      <CollapsibleGamesContainer playerData={playerData} watchedPlayerKeys={watchedPlayerKeys} title={"Free Agent Scheduled Starters"} leagueId={activeLeagueId} addToWatchList={addToWatchList} removeFromWatch={removeFromWatch}></CollapsibleGamesContainer>
     )
   }
 
