@@ -10,6 +10,7 @@ import GameWeatherContainer from './components/game-weather/game-weather-contain
 import WatchlistContainer from './components/watchlist/watchlist-container';
 import Layout from './components/layout';
 import { AuthProvider } from './context/auth-context';
+import LeagueMatchupsContainer from './components/league-matchups/league-matchups-container';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -25,6 +26,7 @@ root.render(
         element={<AddDropScheduler></AddDropScheduler>} />
       <Route path="game-weather" element={<GameWeatherContainer></GameWeatherContainer>} />
       <Route path="watchlist" element={<WatchlistContainer></WatchlistContainer>} />
+      <Route path="matchup" element={<LeagueMatchupsContainer></LeagueMatchupsContainer>} />
       <Route p ath="*" element={<App />} />
       </Route>
     </Routes>

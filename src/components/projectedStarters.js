@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Col, Row, Button } from 'reactstrap';
 import { useSearchParams } from "react-router-dom";
-import getData from "../api/get-free-agent-starters"
+import getFreeAgents from "../api/get-free-agent-starters"
 
 import useEmail from './auth/useEmail';
 import { setCode } from '../api/yahoo-integration-info';
@@ -136,9 +136,8 @@ function ProjectedStarters() {
       setWatchedPlayerIds(watchedPlayerIdsResp.data);
     }
 
-    const response = await getData(user.token, leagueId);
+    const response = await getFreeAgents(user.token, leagueId);
     if (response.success) {
-      // console.log(response.data)
       setData(response.data)
     } else {
       console.log(response.error)
