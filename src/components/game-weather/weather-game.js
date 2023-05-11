@@ -7,7 +7,9 @@ import { getParkFactor } from "../../data/park-factors";
 const WeatherGame = (props) => {
 
 
-    
+    if (!props.game.weather?.length > 0) {
+        return <div>Weather not available.</div>
+    }
 
     const tableHeaders = props.game.weather.map((hour, index) => {
         return <th key={index} className="table-constant">{convertTo12Hour(hour.time_local.slice(11, 16))}</th>
