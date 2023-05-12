@@ -103,7 +103,7 @@ function Game(props) {
       return null;
     }
 
-    const isWatched = watchedPlayerKeys.some(x => x.playerId === pitcherId && x.gameId === gameId);
+    const isWatched = watchedPlayerKeys.some(x => parseInt(x.playerId) === parseInt(pitcherId) && parseInt(x.gameId) === parseInt(gameId));
     const text = isWatched ? "Remove Watch" : "Add To Watch"
     const link = isWatched ?  
       <span className="clickable" onClick={() => removeFromWatch(gameId, pitcherId, leagueId)}>{text}</span> :

@@ -172,7 +172,7 @@ function ProjectedStarters() {
   const removeFromWatch = async (gameId, playerId, leagueId) => {
     console.log(`removing player ${playerId}, game ${gameId}, league ${leagueId} from watchlist`)
     //ToDo: For now we're ignoring gameId
-    const request = { playerId, leagueId }
+    const request = { gameId, playerId, leagueId }
     const resp = await removeFromWatchlistEntry(user.token, request)
     if (resp.success) {
       const watchedKeys = resp.data.map(wl =>  {
