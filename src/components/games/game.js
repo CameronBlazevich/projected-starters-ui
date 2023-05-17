@@ -84,11 +84,11 @@ function Game(props) {
           <Col><PitcherWinLoss pitcher={props.gameInfo.awayPitcher}></PitcherWinLoss></Col>
           <Col><PitcherWinLoss pitcher={props.gameInfo.homePitcher}></PitcherWinLoss></Col>
         </Row>
-        <Row>
+        <Row className="pitcher-stats">
           <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
         </Row>
-        <Row>
+        <Row className="pitcher-stats">
           <Col><PitcherStats2 pitcher={props.gameInfo.awayPitcher}></PitcherStats2></Col>
           <Col><PitcherStats2 pitcher={props.gameInfo.homePitcher}></PitcherStats2></Col>
         </Row>
