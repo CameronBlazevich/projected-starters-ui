@@ -80,9 +80,17 @@ function Game(props) {
               {props.gameInfo.homePitcher?.name?.full}
             </a></Col>
         </Row>
+        <Row className="pitcher-stats">
+          <Col><PitcherWinLoss pitcher={props.gameInfo.awayPitcher}></PitcherWinLoss></Col>
+          <Col><PitcherWinLoss pitcher={props.gameInfo.homePitcher}></PitcherWinLoss></Col>
+        </Row>
         <Row>
           <Col><PitcherStats pitcher={props.gameInfo.awayPitcher}></PitcherStats></Col>
           <Col><PitcherStats pitcher={props.gameInfo.homePitcher}></PitcherStats></Col>
+        </Row>
+        <Row>
+          <Col><PitcherStats2 pitcher={props.gameInfo.awayPitcher}></PitcherStats2></Col>
+          <Col><PitcherStats2 pitcher={props.gameInfo.homePitcher}></PitcherStats2></Col>
         </Row>
         <Row className="pitcher-stats">
           <Col>{renderAddWatch(props.gameInfo.gameId, props.gameInfo.awayPitcher?.playerId, props.leagueId, props.addToWatch, props.removeFromWatch, props.watchedPlayerKeys)}</Col>
@@ -133,12 +141,34 @@ function Game(props) {
     }
   }
   
+  function PitcherWinLoss(props) {
+    const {pitcher} = props;
+    if (!pitcher) {
+      return null;
+    }
+    return (
+      <span className="pitcher-stats">( <span className='bold'>{pitcher.stats.wins}</span> - <span className='bold'>{pitcher.stats.losses} )</span></span>
+    )
+  }
+
   function PitcherStats(props) {
     const {pitcher} = props;
     if (!pitcher) {
       return null;
     }
     return (
-      <p className="pitcher-stats"><span className='bold'>{pitcher.stats.innings_pitched}</span> IP, <span className='bold'>{pitcher.stats.era}</span> ERA, <span className='bold'>{pitcher.stats.strikeouts}</span> SO</p>
+      <span className="pitcher-stats"><span className='bold'>{pitcher.stats.innings_pitched}</span> IP, <span className='bold'>{pitcher.stats.era.toFixed(2)}</span> ERA, <span className='bold'>{pitcher.stats.strikeouts}</span> SO</span>
+    )
+  }
+
+  function PitcherStats2(props) {
+    const {pitcher} = props;
+    if (!pitcher) {
+      return null;
+    }
+    const inningsPitchedPerAppearance = (pitcher.stats.innings_pitched / parseInt(pitcher.stats.games)).toFixed(1);
+    const strikeoutsPerAppearance = ((pitcher.stats.strikeouts / pitcher.stats.innings_pitched) * inningsPitchedPerAppearance).toFixed(1);
+    return (
+      <p className="pitcher-stats"><span className='bold'>{inningsPitchedPerAppearance}</span> IP/G, <span className='bold'>{strikeoutsPerAppearance}</span> K/G</p>
     )
   }
