@@ -382,6 +382,23 @@ button.show-drawer {
   border-width: 1px;
 }
 
+/* .solid-border-success {
+  border-style: solid;
+  border-color: green;
+  border-width: 1px;
+}
+
+.solid-border-warn {
+  border-style: solid;
+  border-color: red;
+  border-width: 1px;
+}
+
+.add-drop-name {
+  max-width: fit-content;
+  min-width: fit-content;
+} */
+
 .pitcher-hitter-matchup-container {
   min-height: 200px;
   position: relative;
@@ -393,4 +410,9 @@ button.show-drawer {
 
 .margin-5 {
   margin: 5px;
+}
+
+.add-drop-stage {
+  padding:15px;
+  margin:15px;
 }
