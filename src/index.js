@@ -11,6 +11,7 @@ import WatchlistContainer from './components/watchlist/watchlist-container';
 import Layout from './components/layout';
 import { AuthProvider } from './context/auth-context';
 import LeagueMatchupsContainer from './components/league-matchups/league-matchups-container';
+import GameSweatContainer from './components/game-sweater/game-sweat-container';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -27,7 +28,8 @@ root.render(
       <Route path="game-weather" element={<GameWeatherContainer></GameWeatherContainer>} />
       <Route path="watchlist" element={<WatchlistContainer></WatchlistContainer>} />
       <Route path="matchup" element={<LeagueMatchupsContainer></LeagueMatchupsContainer>} />
-      <Route p ath="*" element={<App />} />
+      <Route path="game-sweater" element={<GameSweatContainer></GameSweatContainer>} />
+      <Route path="*" element={<App />} />
       </Route>
     </Routes>
     

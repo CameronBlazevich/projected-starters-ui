@@ -394,3 +394,11 @@ button.show-drawer {
 .margin-5 {
   margin: 5px;
 }
+
+.hitter-zone {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+
+  min-height: 75px;
+}
