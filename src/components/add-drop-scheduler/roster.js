@@ -10,11 +10,13 @@ import { useAuthContext } from "../../context/auth-context";
 const Roster = (props) => {
     const [roster, setRoster] = useState();
     const location = useLocation();
-    const leagueId = location.state?.leagueId;
-    const teamId = location.state?.teamId;
+    let leagueId = location.state?.leagueId;
+    let teamId = location.state?.teamId;
     const {user, logout} = useAuthContext();  
 
     useEffect(() => {
+        leagueId = 92842; teamId = 6;
+        //ToDo: hardcoded data
         const getTeam = async (token, leagueId, teamId) => {
             const resp = await getUserRoster(token, leagueId, teamId);
             if (resp.success) {
@@ -33,23 +35,50 @@ const Roster = (props) => {
     }, [])
 
     console.log((roster))
+if (!roster) {
+    return <div>Nothing</div>
+}
+    const rosterRows = roster.map(player => {
+        return (
+            <tr onClick={() => props.onClick(player)}>
+               
+                <td>{player.name.full}</td>
+                <td>{player.status ? player.status : '-'}</td>
+                {/* <td>{player.eligible_positions?.position?.join(', ')}</td> */}
+                {/* <td>{'?'}</td>
+                <td>{'?'}</td>
+                <td>{'games'}</td>
+                <td>{player.player_stats.stats.stat.find(s => s.display_name === 'IP')?.value}</td>
+                <td>{player.player_stats.stats.stat.find(s => s.name === 'Wins')?.value}</td>
+                <td>{'?'}</td>
+                <td>{player.player_stats.stats.stat.find(s => s.name === 'Saves')?.value}</td>
+                <td>{player.player_stats.stats.stat.find(s => s.name === 'Strikeouts')?.value}</td> */}
+            </tr>
+        )
+    })
 
     return (
-        <div>
-            <Table>
+        <div className="">
+            <h3>Current Roster</h3>
+            <Table size="sm" hover>
+            <thead>
                 <tr>
                     <th>Name</th>
                     <th>Status</th>
                     <th>Positions</th>
-                    <th>GP</th>
+                    {/* <th>GP</th>
                     <th>PA</th>
                     <th>GS</th>
                     <th>IP</th>
                     <th>W</th>
                     <th>L</th>
                     <th>S</th>
-                    <th>K</th>
+                    <th>K</th> */}
                 </tr>
+                </thead>
+                <tbody>
+                    {rosterRows}
+                </tbody>
             </Table>
         </div>
     )

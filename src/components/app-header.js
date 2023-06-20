@@ -34,6 +34,9 @@ const AppHeader = (props) => {
                             <NavItem>
                                 <Link className="nav-link" to="/watchlist">Watchlist (beta)</Link>
                             </NavItem>
+                            {/* <NavItem>
+                                <Link className="nav-link" to="/add-drop-scheduler">Schedule Add/Drop (alpha)</Link>
+                            </NavItem> */}
                         </Nav>
                         <NavbarText>
                             <UncontrolledDropdown inNavbar>
