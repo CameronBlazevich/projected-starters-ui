@@ -412,7 +412,16 @@ button.show-drawer {
   margin: 5px;
 }
 
+.hitter-zone {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+
+  min-height: 75px;
+}
+
 .add-drop-stage {
   padding:15px;
   margin:15px;
 }
+
