@@ -44,7 +44,7 @@ if (!roster) {
                
                 <td>{player.name.full}</td>
                 <td>{player.status ? player.status : '-'}</td>
-                <td>{player.eligible_positions.position.join(', ')}</td>
+                {/* <td>{player.eligible_positions?.position?.join(', ')}</td> */}
                 {/* <td>{'?'}</td>
                 <td>{'?'}</td>
                 <td>{'games'}</td>

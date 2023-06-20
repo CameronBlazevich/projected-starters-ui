@@ -27,7 +27,7 @@ root.render(
       <Route path="game-weather" element={<GameWeatherContainer></GameWeatherContainer>} />
       <Route path="watchlist" element={<WatchlistContainer></WatchlistContainer>} />
       <Route path="matchup" element={<LeagueMatchupsContainer></LeagueMatchupsContainer>} />
-      <Route p ath="*" element={<App />} />
+      <Route path="*" element={<App />} />
       </Route>
     </Routes>
     
