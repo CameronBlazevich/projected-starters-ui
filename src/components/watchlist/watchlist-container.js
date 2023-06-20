@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getWatchedPlayers, removeFromWatchlistEntry } from "../../api/watchlist";
 import { Col, Row } from "reactstrap";
 import ReadOnlyConnectedLeaguesDrawer from "../user-leagues/readonly-connected-leagues-drawer";
-import { getUserLeagues } from '../../api/user-leagues';
 import WeatherGame from "../game-weather/weather-game";
 import BattingLineup from "./batting-lineup";
 import WatchlistPanel from "./watchlist-panel";
@@ -17,7 +16,6 @@ const WatchlistContainer = (props) => {
     const [watchlistPlayers, setWatchlistPlayers] = useState();
     const [activeLeagueId, setActiveLeagueId] = useState();
     const [showDrawer, setShowDrawer] = useState(false);
-    const [userLeagues, setUserLeagues] = useState([]);
     const [visiblePitcher, setVisiblePitcher] = useState();
     const [hasUpdated, setHasUpdated] = useState(false)
     const { user, logout } = useAuthContext();
@@ -39,17 +37,6 @@ const WatchlistContainer = (props) => {
                 getWatchlist(activeLeagueId, user.token);
             }
 
-            async function getLeagues(authToken) {
-                const userLeaguesResponse = await getUserLeagues(authToken);
-                if (userLeaguesResponse.success) {
-                    setUserLeagues(userLeaguesResponse.data)
-                } else {
-                    handleUnauthorized(userLeaguesResponse.error, logout)
-                    console.log(`Something went wrong getting user leagues`)
-                }
-            }
-
-            getLeagues(user.token);
         }
 
     }, [hasUpdated, activeLeagueId])
@@ -58,7 +45,6 @@ const WatchlistContainer = (props) => {
         setWatchlistPlayers(null)
         setVisiblePitcher(null)
         setActiveLeagueId(leagueId)
-        
     }
 
     const removeFromWatchlist = async (args) => {
@@ -77,7 +63,7 @@ const WatchlistContainer = (props) => {
             <Row>
                 <Col Col lg="3" className="side-panel">
                     <Row>
-                        <ReadOnlyConnectedLeaguesDrawer showFreeAgents={showPlayerList} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ReadOnlyConnectedLeaguesDrawer>
+                        <ReadOnlyConnectedLeaguesDrawer showFreeAgents={showPlayerList} show={showDrawer} setShow={setShowDrawer}></ReadOnlyConnectedLeaguesDrawer>
                     </Row>
                 </Col>
             </Row>
@@ -120,7 +106,7 @@ const WatchlistContainer = (props) => {
             <Row>
                 <Col lg="3" className="side-panel">
                     <Row>
-                        <ReadOnlyConnectedLeaguesDrawer showFreeAgents={showPlayerList} userLeagues={userLeagues} show={showDrawer} setShow={setShowDrawer}></ReadOnlyConnectedLeaguesDrawer>
+                        <ReadOnlyConnectedLeaguesDrawer showFreeAgents={showPlayerList} show={showDrawer} setShow={setShowDrawer}></ReadOnlyConnectedLeaguesDrawer>
                     </Row>
                     <Row>
                         <WatchlistPanel visiblePitcher={visiblePitcher} setVisiblePitcher={setVisiblePitcher} leagueId={activeLeagueId} watchlist={watchlistPlayers} removeFromWatchlist={removeFromWatchlist}></WatchlistPanel>

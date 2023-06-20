@@ -5,16 +5,16 @@ const ReadOnlyConnectedLeagues = (props) => {
 
     const leagueIdMap = {1: "Yahoo", 2: "Espn"};
 
-    const handleClick = (leagueId) => {
+    const handleClick = (leagueId, teamId) => {
         closeDrawer();
-        showFreeAgents(leagueId)
+        showFreeAgents(leagueId, teamId)
     }
 
     const tableRows = userLeagues.map((league, index) => {
     
         return (
             <tr key={index}>
-                <td><Button onClick={() => handleClick(league.league_id)} color="success" size="sm">Show</Button></td>
+                <td><Button onClick={() => handleClick(league.league_id, league.team_id)} color="success" size="sm">Show</Button></td>
                 <td>{league.league_id}</td>
                 <td>{leagueIdMap[league.league_type_id]}</td>
 

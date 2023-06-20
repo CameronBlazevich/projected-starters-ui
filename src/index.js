@@ -5,7 +5,7 @@ import './index.css';
 import App from './App';
 import TeamStats from './components/containers/team-stats'
 import reportWebVitals from './reportWebVitals';
-import AddDropScheduler from './components/add-drop-scheduler/schedule-add-drops';
+import AddDropScheduler from './components/add-drop-scheduler/schedule-add-drop-container';
 import GameWeatherContainer from './components/game-weather/game-weather-container'
 import WatchlistContainer from './components/watchlist/watchlist-container';
 import Layout from './components/layout';

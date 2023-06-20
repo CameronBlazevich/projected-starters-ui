@@ -1,12 +1,34 @@
 import { Row, Col } from "reactstrap";
 import ReadOnlyConnectedLeagues from "./readonly-connected-leagues";
+import { useAuthContext } from "../../context/auth-context";
+import { handleUnauthorized } from '../errors/handle-unauthorized'
+import { getUserLeagues } from '../../api/user-leagues';
+import { useEffect, useState } from "react";
 
 
 const ConnectedLeaguesDrawer = (props) => {
-    const { show, setShow, showFreeAgents, userLeagues } = props;
+    const [userLeagues, setUserLeagues] = useState();
+    const { user, logout } = useAuthContext();
+    const { show, setShow, showFreeAgents} = props;
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    useEffect(() => {
+        if (user) {
+            async function getLeagues(authToken) {
+                const userLeaguesResponse = await getUserLeagues(authToken);
+                if (userLeaguesResponse.success) {
+                    setUserLeagues(userLeaguesResponse.data)
+                } else {
+                    handleUnauthorized(userLeaguesResponse.error, logout)
+                    console.log(`Something went wrong getting user leagues`)
+                }
+            }
+
+            getLeagues(user.token);
+        }
+    }, [])
 
 
     const renderLeaguesTable = () => {
