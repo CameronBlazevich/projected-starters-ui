@@ -12,6 +12,7 @@ import Layout from './components/layout';
 import { AuthProvider } from './context/auth-context';
 import LeagueMatchupsContainer from './components/league-matchups/league-matchups-container';
 import GameSweatContainer from './components/game-sweater/game-sweat-container';
+import RosterMatchups from './components/roster-matchups/roster-matchups-container'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -29,6 +30,7 @@ root.render(
       <Route path="watchlist" element={<WatchlistContainer></WatchlistContainer>} />
       <Route path="matchup" element={<LeagueMatchupsContainer></LeagueMatchupsContainer>} />
       <Route path="game-sweater" element={<GameSweatContainer></GameSweatContainer>} />
+      <Route path="roster-matchups" element={<RosterMatchups></RosterMatchups>} />
       <Route path="*" element={<App />} />
       </Route>
     </Routes>
