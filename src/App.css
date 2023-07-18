@@ -425,3 +425,19 @@ button.show-drawer {
   margin:15px;
 }
 
+.pitch-circle {
+      width: 20px;
+      height: 20px;
+      /* background-color: red; */
+      border-radius: 50%;
+      position: absolute;
+      display: inline-block;
+}
+.height-50 {
+  min-height: 50px;
+}
+
+.strike-zone {
+  position: relative;
+  min-height: 200px;
+}
